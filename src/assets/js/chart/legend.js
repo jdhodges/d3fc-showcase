@@ -7,6 +7,21 @@
         var formatTime;
         var lastDataPointDisplayed;
 
+        var legendItems =  [
+            'T',
+            function(d) { return formatTime(d.date); },
+            'O',
+            function(d) { return formatPrice(d.open); },
+            'H',
+            function(d) { return formatPrice(d.high); },
+            'L',
+            function(d) { return formatPrice(d.low); },
+            'C',
+            function(d) { return formatPrice(d.close); },
+            'V',
+            function(d) { return formatVolume(d.volume); }
+        ];
+
         function legend(selection) {
             selection.each(function(model) {
                 var container = d3.select(this);
@@ -17,47 +32,17 @@
 
                 if (model.data !== lastDataPointDisplayed) {
                     lastDataPointDisplayed = model.data;
-                    container.datum(model.data);
+
+                    var span = container.select('p')
+                        .selectAll('span')
+                        .data(legendItems);
+
+                    span.enter()
+                        .append('span')
+                        .attr('class', function(d, i) { return i % 2 === 0 ? 'legendLabel' : 'legendValue'; });
+
+                    span.text(function(d, i) { return i % 2 === 0 ? d : d(model.data); });
                 }
-
-                var d = container.datum();
-
-                var legendComponents =  [
-                    'T',
-                    formatTime(d.date),
-                    'O',
-                    formatPrice(d.open),
-                    'H',
-                    formatPrice(d.high),
-                    'L',
-                    formatPrice(d.low),
-                    'C',
-                    formatPrice(d.close),
-                    'V',
-                    formatVolume(d.volume)
-                ];
-
-                var span = container.select('p')
-                    .selectAll('span')
-                    .data(legendComponents);
-
-                span.text(function(d) {
-                    return d;
-                });
-
-                span.enter()
-                    .append('span')
-                    .text(function(d) {
-                        return d;
-                    });
-
-                span.each(function(d, i) {
-                    if ((i + 1) % 2 === 0) {
-                        this.setAttribute('class', 'legendValue');
-                    } else {
-                        this.setAttribute('class', 'legendLabel');
-                    }
-                });
             });
         }
 
