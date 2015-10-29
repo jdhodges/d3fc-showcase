@@ -1,19 +1,27 @@
 #legend {
   position: absolute;
   top: 0;
-  left: 0;
-  margin: 10px;
+  right: 65px;
+  margin-top: 15px;
+  padding: 3px 0 3px 10px;
   background-color: fadeout(@legend-background-color, 25%);
   color : @legend-font-color;
   line-height: 1em;
   font-family: @font-family;
   font-size: @legend-font-size;
-  th {
-    padding-right: 5px;
-    text-align: center;
-    font-weight: normal;
+
+  .legendLabel, .legendValue {
+    float: left;
   }
-  td {
-      text-align: right;
+
+  .legendLabel {
+    min-width: 15px;
+    color: #4f696c;
+    font-weight: 900;
+  }
+
+  .legendValue {
+    min-width: 55px;
+    color: #7B9A9C;
   }
 }
