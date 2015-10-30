@@ -33,9 +33,13 @@
                 if (model.data !== lastDataPointDisplayed) {
                     lastDataPointDisplayed = model.data;
 
-                    var span = container.select('p')
-                        .selectAll('span')
-                        .data(legendItems);
+                    var p = container.selectAll('p')
+                        .data([legendItems]);
+
+                    p.enter().append('p');
+
+                    var span = p.selectAll('span')
+                        .data(function(d) { return d; });
 
                     span.enter()
                         .append('span')
