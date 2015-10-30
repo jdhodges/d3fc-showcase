@@ -41,7 +41,7 @@
                         .append('span')
                         .attr('class', function(d, i) { return i % 2 === 0 ? 'legendLabel' : 'legendValue'; });
 
-                    span.text(function(d, i) { return i % 2 === 0 ? d : d(model.data); });
+                    span.text(function(d) { return d3.functor(d)(model.data); });
                 }
             });
         }
