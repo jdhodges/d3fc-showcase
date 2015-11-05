@@ -16,12 +16,12 @@
             display: 'Daily',
             seconds: 86400,
             d3TimeInterval: {unit: d3.time.day, value: 1},
-            timeFormat: '%b-%d'});
+            timeFormat: '%b %d'});
         var hour1 = sc.model.period({
             display: '1 Hr',
             seconds: 3600,
             d3TimeInterval: {unit: d3.time.hour, value: 1},
-            timeFormat: '%b-%d %Hh'});
+            timeFormat: '%b %d %Hh'});
         var minute5 = sc.model.period({
             display: '5 Min',
             seconds: 300,
@@ -121,7 +121,7 @@
         }
 
         function onCrosshairChange(dataPoint) {
-            legendModel.data = dataPoint ? dataPoint : primaryChartModel.data[primaryChartModel.data.length - 1];
+            legendModel.data = dataPoint;
             render();
         }
 
@@ -136,7 +136,9 @@
             primaryChartModel.data = data;
             secondaryChartModel.data = data;
             navModel.data = data;
-            // TODO: probably only want to update this if the user isn't already mousing over with the crosshair
+        }
+
+        function initialiseLegendData(data) {
             legendModel.data = data[data.length - 1];
         }
 
@@ -186,6 +188,7 @@
                         console.log('Error getting historic data: ' + err);
                     } else {
                         updateModelData(data);
+                        initialiseLegendData(data);
                         resetToLatest();
                     }
                 });
