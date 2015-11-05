@@ -1,54 +1,88 @@
-@primary-blue: #377FB9;
-@primary-dark-blue: #1E292C;
-@primary-green: #6c0;
-@primary-orange: #FF9832;
-@primary-red: #c60;
-@primary-white: #f0f8ff;
-@primary-black: #000;
-@offwhite: #fefefe;
-@background-color: #263337;
+// Colour Scheme
+// Primary colours
+@primary-dark-blue: #263337;
+@primary-blue: #7B9FA1;
+@primary-white: #FFFFFF;
+
+// Secondary colours
+@secondary-dark-blue: #1C2629;
+@secondary-blue: #377EB8;
+@secondary-grey: #3C4F53;
+@secondary-orange: #FF7F00;
+
+// Tertiary colours
+@tertiary-purple: #984EA3;
+@tertiary-green: #4DAF4A;
+@tertiary-red: #E41A1C;
+@tertiary-pink: #F781BF;
+@tertiary-yellow: #FFFF33;
+@tertiary-blue: #A6CEE3;
 
 // Font
 @font-family: 'Roboto', sans-serif;
 @font-family-sans-serif: @font-family;
-@legend-font-size: 15px;
-@axis-font-size: 10px;
+@font-colour: @primary-white;
 
-// Buttons
-@toggled-background-colour: #5cb85c;
-@toggled-text-colour: #fff;
+// Font sizes
+@legend-font-size: 12px;
+@axis-font-size: 10px;
+@product-font-size: 20px;
+@product-dropdown-font-size: 14px;
+@period-selector-font-size: 14px;
+
+// Background
+@background-colour: @primary-dark-blue;
+
+// Buttons - will be redundant with new styling
+@toggled-background-colour: @tertiary-green;
+@toggled-text-colour: @primary-white;
+
+// Dropdown
+@dropdown-colour: @secondary-grey;
+@dropdown-hover: fade(@primary-white, 20%);
+@caret-colour: @primary-blue;
 
 // Plot Area
-@candlestick-down-stroke: @primary-orange;
-@candlestick-up-stroke: @primary-orange;
-@candlestick-down-fill: @background-color;
-@candlestick-up-fill: @primary-orange;
-@moving-average-line-colour: #f0f;
-@bollinger-upper-colour: @primary-red;
-@bollinger-lower-colour: @primary-green;
-@bollinger-fill-colour: #d3d3d3;
+@stroke-width: 3px;
+@area-fill: fade(@tertiary-blue, 75%);
+@point-colour: @tertiary-blue;
 
-// Line colour
-@line-colour: #515B5E;
+// Plot Area - Candlestick
+@candlestick-down-stroke: @secondary-orange;
+@candlestick-up-stroke: @secondary-orange;
+@candlestick-down-fill: @primary-dark-blue;
+@candlestick-up-fill: @secondary-orange;
+
+// Plot Area - Moving Average
+@moving-average-colour: @tertiary-yellow;
+
+// Plot Area - Bollinger
+@bollinger-upper-colour: @tertiary-blue;
+@bollinger-lower-colour: @tertiary-blue;
+@bollinger-fill-colour: fade(@primary-white, 20%);
+
+// Gridlines
+@gridline-colour: @secondary-grey;
+
+// Closing
+@closing-colour: @secondary-blue;
 
 // Primary Y Axis
 @y-axis-width: 45px;
-@annotation-text-colour: #fff;
 
 // Shared X Axis
 @x-axis-height: 20px;
 
 // Navigator
 @navigator-height: 100px;
-@navigator-extent-colour: #d1d1e0;
-@navigator-colour: #324245;
+@navigator-extent-colour: @primary-white;
+@navigator-colour: @primary-blue;
+@navigator-background-colour: @secondary-dark-blue;
+@navigator-stroke: 1.3px;
+@navigator-selection-border-colour: @primary-white;
 
 // Seperator
-@head-border-width: 2px solid;
-@head-border-colour: #b0c4de;
 @head-padding-top: 10px;
-@head-padding-bottom: 8px;
-@head-margin-bottom: 10px;
 
 // Sidebar
 @bootstrap-padding-width: 15px;
@@ -59,11 +93,22 @@
 @option-group-padding: 15px;
 
 // Crosshair
-@crosshair-line-color: #808080;
-@crosshair-circle-color: @primary-blue;
-@crosshair-circle-opacity: 0.5;
+@crosshair-line-colour: @tertiary-blue;
+@crosshair-circle-colour: @tertiary-blue;
+@crosshair-circle-opacity: 0.75;
 
-// legend
-@legend-background-color: @background-color;
-@legend-font-color: @offwhite;
-@legend-font-size: 10px;
+// Legend
+@legend-background-colour: @background-colour;
+@legend-label-font-colour: @secondary-grey;
+@legend-value-font-colour: @primary-blue;
+
+// Head
+@period-selector-font-colour: @primary-blue;
+
+// Secondary Chart
+// RSI
+@rsi-line-colour: @tertiary-purple;
+// MACD
+@macd-signal-line-colour: @tertiary-red;
+@macd-line-colour: @tertiary-green;
+@macd-line-width: 2px;

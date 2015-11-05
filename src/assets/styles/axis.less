@@ -9,19 +9,25 @@
 .x-axis {
   .tick text {
     font-size: @axis-font-size;
-    fill: @offwhite;
+    fill: @font-colour;
+  }
+  .tick path, line {
+    stroke: @gridline-colour;
   }
   .domain {
-    stroke: @line-colour;
+    stroke: @gridline-colour;
   }
 }
 
 .y-axis {
   .tick text {
     font-size: @axis-font-size;
-    fill: @offwhite;
+    fill: @font-colour;
+  }
+  .tick path {
+    stroke: @gridline-colour;
   }
   .domain {
-    stroke: @line-colour;
+    stroke: @gridline-colour;
   }
 }

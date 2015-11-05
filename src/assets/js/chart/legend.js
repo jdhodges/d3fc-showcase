@@ -6,6 +6,7 @@
         var formatVolume;
         var formatTime;
         var lastDataPointDisplayed;
+        var lastTimeFormatLength;
 
         var legendItems =  [
             'T',
@@ -33,19 +34,22 @@
                 if (model.data !== lastDataPointDisplayed) {
                     lastDataPointDisplayed = model.data;
 
-                    var p = container.selectAll('p')
-                        .data([legendItems]);
-
-                    p.enter().append('p');
-
-                    var span = p.selectAll('span')
-                        .data(function(d) { return d; });
+                    var span = container.selectAll('span')
+                        .data(legendItems);
 
                     span.enter()
                         .append('span')
                         .attr('class', function(d, i) { return i % 2 === 0 ? 'legendLabel' : 'legendValue'; });
 
-                    span.text(function(d) { return d3.functor(d)(model.data); });
+                    span.text(function(d, i) { return i % 2 === 0 ? d : model.data ? d(model.data) : ''; });
+
+                    if (model.data && formatTime(model.data.date).length !== lastTimeFormatLength) {
+                        lastTimeFormatLength = formatTime(model.data.date).length;
+
+                        span.style('min-width', function(d, i) {
+                            return i === 1 ? formatTime(model.data.date).length * 7 + 'px' : null;
+                        });
+                    }
                 }
             });
         }

@@ -1,7 +1,16 @@
 .secondary-container {
+  .background {
+    stroke: @gridline-colour;
+  }
+  .annotations {
+    .annotation line {
+      stroke: @gridline-colour;
+      stroke-dasharray: 20px;
+    }
+  }
   .x-axis {
     path {
-      stroke: @offwhite;
+      stroke: @gridline-colour;
     }
   }
 
@@ -10,6 +19,31 @@
       text {
         display: none;
       }
+    }
+  }
+
+  .rsi {
+    stroke: @rsi-line-colour;
+    stroke-width: @stroke-width;
+  }
+
+  .macd-signal {
+    .line {
+      stroke: @macd-signal-line-colour;
+      stroke-width: @macd-line-width;
+    }
+  }
+
+  .macd {
+    .line {
+      stroke: @macd-line-colour;
+      stroke-width: @macd-line-width;
+    }
+  }
+
+  .zero {
+    .annotation line {
+      visibility: hidden;
     }
   }
 }

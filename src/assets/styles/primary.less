@@ -1,28 +1,33 @@
 #primary-container {
   path.line {
     stroke: @primary-blue;
+    stroke-width: @stroke-width;
 
     &.movingAverage {
-      stroke: @moving-average-line-colour;
+      stroke: @moving-average-colour;
     }
   }
   
   path.down {
     stroke: @candlestick-down-stroke;
+    stroke-width: @stroke-width;
     fill: @candlestick-down-fill;
   }
   
   path.up {
     stroke: @candlestick-up-stroke;
+    stroke-width: @stroke-width;
     fill: @candlestick-up-fill;
   }
 
   .upper > path.line {
     stroke: @bollinger-upper-colour;
+    stroke-width: @stroke-width;
   }
 
   .lower > path.line {
     stroke: @bollinger-lower-colour;
+    stroke-width: @stroke-width;
   }
 
   .average > path.line {
@@ -33,14 +38,27 @@
     fill: @bollinger-fill-colour;
   }
 
+  .area {
+    fill: @area-fill;
+  }
+
+  .point {
+    stroke: @point-colour;
+    fill: @point-colour;
+  }
+
   .gridline {
-    stroke: @line-colour;
+    stroke: @gridline-colour;
   }
 
   .background {
-    stroke: @line-colour;
+    stroke: @gridline-colour;
     stroke-width: 3px;
   }
 
-  background-color: @background-color;
+  .ohlc {
+    stroke-width: @stroke-width;
+  }
+
+  background-color: @background-colour;
 }

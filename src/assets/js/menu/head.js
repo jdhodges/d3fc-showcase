@@ -14,8 +14,8 @@
                 dispatch[sc.event.dataProductChange](product);
             });
 
-        var dataPeriodDropdown = sc.menu.generator.dropdownGroup()
-            .on('optionChange', function(period) {
+        var dataPeriodSelector = sc.menu.generator.tabGroup()
+            .on('tabClick', function(period) {
                 dispatch[sc.event.dataPeriodChange](period);
             });
 
@@ -32,13 +32,13 @@
                     .call(dataProductDropdown);
 
                 var periods = model.selectedProduct.periods;
-                selection.select('#period-dropdown')
+                selection.select('#period-selector')
                     .classed('hide', periods.length <= 1) // TODO: get from model instead?
                     .datum({
                         options: periods.map(sc.menu.periodAdaptor),
                         selectedIndex: periods.indexOf(model.selectedPeriod)
                     })
-                    .call(dataPeriodDropdown);
+                    .call(dataPeriodSelector);
 
                 selection.select('#reset-button')
                     .on('click', function() {

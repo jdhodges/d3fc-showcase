@@ -1,43 +1,30 @@
 <!DOCTYPE HTML>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="A cross-platform financial charting application to showcase the functionality of d3fc components">
     <title>d3fc Showcase</title>
-
     <link rel="stylesheet" href="assets/css/style.css">
-
-    <script src="assets/js/d3.js"></script>
-    <script src="assets/js/css-layout.js"></script>
-    <script src="assets/js/svg-innerhtml.js"></script>
-    <script src="assets/js/d3fc.js"></script>
-
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-  </head>
-  <body>
-    <div class="container" id="app-container">
-      <div class="row row-offcanvas-right head-menu head-row">
-        <div class="col-xs-12 col-sm-12 col-md-9">
-          <div class="pull-left">
-            <select id="product-dropdown" selected="product" class="form-control"></select>
-            <select id="period-dropdown" selected="period" class="form-control"></select>
-          </div>
-          <div class="pull-right">
+    <!-- Version: <%- version %> -->
+</head>
+<body>
+<div class="container" id="app-container">
+    <div class="row row-offcanvas-right head-menu head-row">
+        <div class="col-xs-12 col-sm-12 col-md-9 head-sub-row">
+            <div id="product-dropdown" class="dropdown">
+                <button id="product-dropdown-button" class="dropdown-toggle" type="button" data-toggle="dropdown"></button>
+            </div>
             <div id="reset-button">
-              <button class="btn btn-default" type="button">Reset</button>
+                <button class="btn btn-default" type="button">Reset</button>
             </div>
-            <div id="toggle-button">
-              <button class="btn btn-default visible-xs visible-sm" type="button">Toggle</button>
-            </div>
-          </div>
+            <div id="period-selector"></div>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-3 sidebar-offcanvas">
         </div>
-      </div>
-      <div class="row row-offcanvas-right primary-row">
+    </div>
+    <div class="row row-offcanvas-right primary-row">
         <div class="col-xs-12 col-sm-12 col-md-9 col-chart">
             <div id="legend"></div>
             <svg id="charts-container" layout-style="flexDirection: column">
@@ -62,14 +49,14 @@
             </svg>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-3 sidebar-offcanvas sidebar-menu">
-          <div class="series-buttons btn-group"></div>
-          <div class="y-value-accessor-buttons btn-group"></div>
-          <div class="indicator-buttons btn-group"></div>
-          <div class="secondary-chart-buttons btn-group"></div>
+            <div class="series-buttons btn-group"></div>
+            <div class="y-value-accessor-buttons btn-group"></div>
+            <div class="indicator-buttons btn-group"></div>
+            <div class="secondary-chart-buttons btn-group"></div>
         </div>
-      </div>
     </div>
-    <script src="assets/js/app.js"></script>
-    <script src="//localhost:35729/livereload.js"></script>
-  </body>
+</div>
+<script src="<%- appJsPath %>"></script>
+<%= liveReload === true ? '<script src="//localhost:35729/livereload.js"></script>' : '' %>
+</body>
 </html>

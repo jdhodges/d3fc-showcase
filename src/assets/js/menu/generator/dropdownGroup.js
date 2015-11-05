@@ -5,32 +5,36 @@
         var dispatch = d3.dispatch('optionChange');
 
         var dataJoin = fc.util.dataJoin()
-            .selector('option')
-            .element('option');
+            .selector('ul')
+            .element('ul');
 
-        function layoutDropdown(sel) {
-            var selectedIndex = sel.datum().selectedIndex || 0;
+        function dropdownGroup(selection) {
+            var selectedIndex = selection.datum().selectedIndex || 0;
+            var model = selection.datum();
+            var ul = dataJoin(selection, [model.options]);
 
-            dataJoin(sel, sel.datum().options)
-                .text(function(d) { return d.displayString; })
-                .attr({
-                    value: function(d) { return d.valueString; }
-                })
-                .property('selected', function(d, i) { return (i === selectedIndex); });
+            ul.attr('class', 'dropdown-menu');
+
+            var li = ul.selectAll('li')
+                .data(fc.util.fn.identity);
+
+            li.enter()
+                .append('li')
+                .on('click', dispatch.optionChange)
+                .append('a')
+                .attr('href', '#');
+
+            li.select('a')
+                .text(function(d) { return d.displayString; });
+
+            selection.select('#product-dropdown-button').html(function(d) {
+                return model.options[selectedIndex].displayString + '<span class="caret"></span>';
+            });
         }
 
-        function optionGenerator(selection) {
-            selection.call(layoutDropdown);
+        d3.rebind(dropdownGroup, dispatch, 'on');
 
-            selection.on('change', function() {
-                    var selectedOption = d3.select(this).selectAll('option')[0][this.selectedIndex].__data__;
-                    dispatch.optionChange(selectedOption);
-                });
-        }
-
-        d3.rebind(optionGenerator, dispatch, 'on');
-
-        return optionGenerator;
+        return dropdownGroup;
     };
 
 })(d3, fc, sc);

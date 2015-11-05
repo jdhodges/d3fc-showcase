@@ -36,13 +36,15 @@
     "grunt-contrib-jasmine": "^0.9.0",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-contrib-less": "^1.0.1",
+    "grunt-contrib-uglify": "^0.10.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-cordovacli": "^0.8.2",
-    "grunt-gh-pages": "^0.10.0",
+    "grunt-gh-pages": "^1.0.0",
     "grunt-jscs": "^2.0.0",
+    "grunt-template": "^0.2.3",
     "grunt-template-jasmine-istanbul": "^0.3.4",
+    "jit-grunt": "^0.9.1",
     "jquery": "^2.1.4",
-    "load-grunt-tasks": "^3.2.0",
     "time-grunt": "^1.2.1"
   }
 }

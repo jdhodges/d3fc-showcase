@@ -1,10 +1,18 @@
 .closeLine {
   text {
-    fill: @annotation-text-colour;
+    fill: @font-colour;
   }
 
   path {
-    stroke: @primary-blue;
-    fill: @primary-blue;
+    stroke: @closing-colour !important;  // Important avoids the tick mark css overwriting
+    fill: @closing-colour;
+  }
+}
+
+.plot-area {
+  .multi {
+    .annotation line {
+      stroke: @closing-colour;
+    }
   }
 }

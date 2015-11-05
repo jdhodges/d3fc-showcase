@@ -4,6 +4,7 @@ module.exports = function(grunt) {
     'use strict';
 
     require('time-grunt')(grunt);
+    require('jit-grunt')(grunt);
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -32,6 +33,14 @@ module.exports = function(grunt) {
                 'Gruntfile.js',
                 '<%= meta.srcJsFiles %>',
                 '<%= meta.testJsFiles %>'
+            ],
+            vendorJsFiles: [
+                'node_modules/d3fc/node_modules/d3/d3.js',
+                'node_modules/d3fc/node_modules/css-layout/dist/css-layout.js',
+                'node_modules/d3fc/node_modules/svg-innerhtml/svg-innerhtml.js',
+                'node_modules/d3fc/dist/d3fc.js',
+                'node_modules/jquery/dist/jquery.min.js',
+                'node_modules/bootstrap/dist/js/bootstrap.min.js'
             ],
             coverageDir: 'coverage'
         },
@@ -95,51 +104,9 @@ module.exports = function(grunt) {
         copy: {
             web: {
                 files: [{
-                    cwd: 'src',
-                    src: ['index.html'],
-                    dest: 'dist',
-                    expand: true
-                },
-                {
-                    cwd: 'node_modules/d3fc/node_modules/d3/',
-                    src: ['d3.js'],
-                    dest: 'dist/assets/js',
-                    expand: true
-                },
-                {
-                    cwd: 'node_modules/d3fc/node_modules/css-layout/dist/',
-                    src: ['css-layout.js'],
-                    dest: 'dist/assets/js',
-                    expand: true
-                },
-                {
-                    cwd: 'node_modules/d3fc/node_modules/svg-innerhtml/',
-                    src: ['svg-innerhtml.js'],
-                    dest: 'dist/assets/js',
-                    expand: true
-                },
-                {
-                    cwd: 'node_modules/d3fc/dist/',
-                    src: ['d3fc.js'],
-                    dest: 'dist/assets/js',
-                    expand: true
-                },
-                {
-                    cwd: 'node_modules/bootstrap/dist/js/',
-                    src: ['bootstrap.min.js'],
-                    dest: 'dist/assets/js',
-                    expand: true
-                },
-                {
                     cwd: 'node_modules/bootstrap/dist/fonts/',
                     src: ['**'],
                     dest: 'dist/assets/fonts',
-                    expand: true
-                },
-                {
-                    cwd: 'node_modules/jquery/dist',
-                    src: ['jquery.min.js'],
-                    dest: 'dist/assets/js',
                     expand: true
                 }]
             },
@@ -265,17 +232,21 @@ module.exports = function(grunt) {
 
         concat: {
             development: {
-                src: ['<%= meta.srcJsFiles %>'],
+                src: ['<%= meta.vendorJsFiles %>', '<%= meta.srcJsFiles %>'],
                 dest: 'dist/assets/js/app.js',
                 options: {
                     sourceMap: true
                 }
+            }
+        },
+
+        uglify: {
+            options: {
+                preserveComments: 'some'
             },
             production: {
-                src: ['<%= meta.srcJsFiles %>'],
-                dest: 'dist/assets/js/app.js',
-                options: {
-                    sourceMap: false
+                files: {
+                    'dist/assets/js/app.min.js': ['<%= meta.vendorJsFiles %>', '<%= meta.srcJsFiles %>']
                 }
             }
         },
@@ -283,13 +254,7 @@ module.exports = function(grunt) {
         jasmine: {
             options: {
                 specs: '<%= meta.testJsFiles %>',
-                vendor: [
-                    'node_modules/d3fc/node_modules/d3/d3.js',
-                    'node_modules/d3fc/node_modules/css-layout/dist/css-layout.js',
-                    'node_modules/d3fc/dist/d3fc.js',
-                    'node_modules/jquery/dist/jquery.min.js',
-                    'node_modules/bootstrap/dist/js/bootstrap.min.js'
-                ],
+                vendor: '<%= meta.vendorJsFiles %>',
                 keepRunner: true
             },
             test: {
@@ -324,12 +289,35 @@ module.exports = function(grunt) {
                     }
                 }
             }
+        },
+
+        template: {
+            development: {
+                options: {
+                    data: {
+                        appJsPath: 'assets/js/app.js',
+                        liveReload: true,
+                        version: 'Development'
+                    }
+                },
+                files: {
+                    'dist/index.html': ['src/index.html.tpl']
+                }
+            },
+            production: {
+                options: {
+                    data: {
+                        appJsPath: 'assets/js/app.min.js',
+                        liveReload: false,
+                        version: '<%= pkg.version %>'
+                    }
+                },
+                files: {
+                    'dist/index.html': ['src/index.html.tpl']
+                }
+            }
         }
 
-    });
-
-    require('load-grunt-tasks')(grunt, {
-        pattern: ['grunt-*', '!grunt-template-jasmine-istanbul']
     });
 
     grunt.registerTask('default', ['build']);
@@ -347,11 +335,11 @@ module.exports = function(grunt) {
     grunt.registerTask('test:coverage', ['jasmine:coverage']);
 
     grunt.registerTask('build', ['check', 'test:coverage', 'clean',
-        'concat:production', 'less:production', 'copy']);
+        'template:production', 'uglify:production', 'less:production', 'copy']);
     grunt.registerTask('build:development', ['check', 'test', 'clean',
-        'concat:development', 'less:development', 'copy']);
+        'template:development', 'concat:development', 'less:development', 'copy']);
     grunt.registerTask('build:warnOnly', ['check:warnOnly', 'test', 'clean',
-        'concat:development', 'less:development', 'copy']);
+        'template:development', 'concat:development', 'less:development', 'copy']);
 
     grunt.registerTask('build:android', ['build', 'cordovacli:buildAndroid']);
     grunt.registerTask('build:ios', ['build', 'cordovacli:buildIos']);

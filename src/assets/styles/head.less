@@ -1,6 +1,46 @@
 .head-row {
   padding-top: @head-padding-top;
-  padding-bottom: @head-padding-bottom;
-  margin-bottom: @head-margin-bottom;
-  background-color: @background-color;
+  background-color: @background-colour;
+}
+
+.head-sub-row {
+  display: flex;
+}
+
+#period-selector {
+  align-self: flex-end;
+  flex-grow: 1;
+  margin-right: 45px;
+
+  ul {
+    list-style: none;
+    float: right;
+    margin: 0;
+  }
+  li {
+    display: inline-block;
+    border: 1px solid @gridline-colour;
+    border-bottom: 0;
+    margin-left: -1px;
+    width: 56px;
+    line-height: 15px;
+    text-align: center;
+  }
+
+  li:first-child {
+    margin-left: 0;
+  }
+  li.active {
+    background-color: fade(@primary-white, 20%);
+  }
+  li.active a {
+    color: @primary-white;
+  }
+  a {
+    color: @period-selector-font-colour;
+    text-decoration: none;
+    padding: 3px;
+    font-size: @period-selector-font-size;
+    display: block;
+  }
 }

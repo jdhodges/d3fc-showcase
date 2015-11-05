@@ -3,24 +3,25 @@
 
   .extent {
     fill: @navigator-extent-colour;
-    stroke: @offwhite;
+    stroke: @navigator-selection-border-colour;
     fill-opacity: 0.125;
     shape-rendering: crispEdges;
   }
 
   .background {
-    fill: @primary-dark-blue;
-    stroke: @line-colour;
+    fill: @navigator-background-colour;
+    stroke: @gridline-colour;
     stroke-width: 3px;
   }
 
   .plot-area {
     .multi {
       .area {
-        fill: @navigator-colour;
+        fill: @gridline-colour;
       }
       path {
-        stroke: @line-colour;
+        stroke: @navigator-colour;
+        stroke-width: @navigator-stroke;
       }
     }
   }
