@@ -139,7 +139,7 @@
         }
 
         function initialiseLegendData(data) {
-            legendModel.data = data[data.length - 1];
+            legendModel.data = null;
         }
 
         function updateModelSelectedProduct(product) {

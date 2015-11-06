@@ -6,7 +6,6 @@
         var formatVolume;
         var formatTime;
         var lastDataPointDisplayed;
-        var lastTimeFormatLength;
 
         var legendItems =  [
             'T',
@@ -31,7 +30,7 @@
                 formatVolume = model.product.volumeFormat;
                 formatTime = model.period.timeFormat;
 
-                if (model.data !== lastDataPointDisplayed) {
+                if (!model.data || model.data !== lastDataPointDisplayed) {
                     lastDataPointDisplayed = model.data;
 
                     var span = container.selectAll('span')
@@ -42,14 +41,6 @@
                         .attr('class', function(d, i) { return i % 2 === 0 ? 'legendLabel' : 'legendValue'; });
 
                     span.text(function(d, i) { return i % 2 === 0 ? d : model.data ? d(model.data) : ''; });
-
-                    if (model.data && formatTime(model.data.date).length !== lastTimeFormatLength) {
-                        lastTimeFormatLength = formatTime(model.data.date).length;
-
-                        span.style('min-width', function(d, i) {
-                            return i === 1 ? formatTime(model.data.date).length * 7 + 'px' : null;
-                        });
-                    }
                 }
             });
         }

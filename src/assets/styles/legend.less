@@ -1,13 +1,17 @@
 #legend {
   position: absolute;
-  top: 0;
-  right: 65px;
-  margin-top: 10px;
+  top: 2px;
+  right: @y-axis-width;
+  margin-right: 17px;
   padding: 10px;
   background-color: fadeout(@legend-background-colour, 25%);
   line-height: 1em;
   font-family: @font-family;
   font-size: @legend-font-size;
+
+  span:nth-child(2) {
+    min-width: 70px;
+  }
 
   .legendLabel, .legendValue {
     display: inline-block
@@ -16,7 +20,6 @@
   .legendLabel {
     margin-right: 4px;
     color: @legend-label-font-colour;
-    font-weight: 900;
   }
 
   .legendValue {
