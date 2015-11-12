@@ -2,11 +2,9 @@
     'use strict';
 
     sc.model.menu.secondaryChartOptions = function() {
-
         return [
-            sc.menu.option('RSI', 'secondary-rsi', sc.chart.rsi()),
-            sc.menu.option('MACD', 'secondary-macd', sc.chart.macd()),
-            sc.menu.option('Volume', 'secondary-volume', sc.chart.volume())
+            sc.menu.option('Relative Strength Index', 'secondary-rsi', sc.chart.rsi(),'assets/icons/rsi-indicator.svg'),
+            sc.menu.option('MACD', 'secondary-macd', sc.chart.macd(),'assets/icons/macd-indicator.svg')
         ];
     };
 

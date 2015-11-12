@@ -2,8 +2,9 @@
     'use strict';
 
     // TODO: Move to /model
-    sc.menu.option = function(displayString, valueString, option) {
+    sc.menu.option = function(displayString, valueString, option, icon) {
         return {
+            icon: icon || null,
             displayString: displayString, // TODO: is 'displayName' better?
             valueString: valueString, // TODO: is this an id?
             option: option, // TODO: Ideally, remove.
