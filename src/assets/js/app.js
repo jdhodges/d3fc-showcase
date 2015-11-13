@@ -59,8 +59,7 @@
 
         var primaryChartModel = sc.model.primaryChart(generated);
         var secondaryChartModel = sc.model.secondaryChart(generated);
-        var sideMenuModel = sc.model.menu.side();
-        var componentsMenuModel = sc.model.menu.components();
+        var selectorsModel = sc.model.menu.selectors();
         var xAxisModel = sc.model.xAxis(day1);
         var navModel = sc.model.nav();
         var headMenuModel = sc.model.headMenu([generated, bitcoin], generated, day1);
@@ -75,8 +74,7 @@
         };
 
         var headMenu;
-        var sideMenu;
-        var componentsMenu;
+        var selectors;
 
         function renderInternal() {
             if (layoutRedrawnInNextRender) {
@@ -108,14 +106,10 @@
             containers.app.select('.head-menu')
                 .datum(headMenuModel)
                 .call(headMenu);
-            //
-            containers.app.select('#components')
-                .datum(componentsMenuModel)
-                .call(componentsMenu);
 
-            containers.app.select('.sidebar-menu')
-              .datum(sideMenuModel)
-              .call(sideMenu);
+            containers.app.select('#selectors')
+                .datum(selectorsModel)
+                .call(selectors);
 
             if (layoutRedrawnInNextRender) {
                 containers.suspendLayout(true);
@@ -257,58 +251,23 @@
             option.isSelected = true;
         }
 
-        function initialiseSideMenu() {
-            return sc.menu.side()
+        function initialiseSelectors() {
+            return sc.menu.selectors()
                 .on(sc.event.primaryChartSeriesChange, function(series) {
                     primaryChartModel.series = series;
-                    selectOption(series, sideMenuModel.seriesOptions);
-                    render();
-                })
-                .on(sc.event.primaryChartYValueAccessorChange, function(yValueAccessor) {
-                    primaryChartModel.yValueAccessor = yValueAccessor;
-                    selectOption(yValueAccessor, sideMenuModel.yValueAccessorOptions);
+                    selectOption(series, selectorsModel.seriesOptions);
                     render();
                 })
                 .on(sc.event.primaryChartIndicatorChange, function(indicator) {
                     indicator.isSelected = !indicator.isSelected;
-                    primaryChartModel.indicators = sideMenuModel.indicatorOptions.filter(function(option) {
+                    primaryChartModel.indicators = selectorsModel.indicatorOptions.filter(function(option) {
                         return option.isSelected;
                     });
                     render();
                 })
                 .on(sc.event.secondaryChartChange, function(chart) {
                     chart.isSelected = !chart.isSelected;
-                    charts.secondaries = sideMenuModel.secondaryChartOptions.filter(function(option) {
-                        return option.isSelected;
-                    });
-                    // TODO: This doesn't seem to be a concern of menu.
-                    charts.secondaries.forEach(function(chartOption) {
-                        chartOption.option.on(sc.event.viewChange, onViewChange);
-                    });
-                    // TODO: Remove .remove! (could a secondary chart group component manage this?).
-                    containers.secondaries.selectAll('*').remove();
-                    updateLayout();
-                    render();
-                });
-        }
-
-        function initialiseComponentsMenu() {
-            return sc.menu.components()
-                .on(sc.event.primaryChartSeriesChange, function(series) {
-                    primaryChartModel.series = series;
-                    selectOption(series, componentsMenuModel.seriesOptions);
-                    render();
-                })
-                .on(sc.event.primaryChartIndicatorChange, function(indicator) {
-                    indicator.isSelected = !indicator.isSelected;
-                    primaryChartModel.indicators = componentsMenuModel.indicatorOptions.filter(function(option) {
-                        return option.isSelected;
-                    });
-                    render();
-                })
-                .on(sc.event.secondaryChartChange, function(chart) {
-                    chart.isSelected = !chart.isSelected;
-                    charts.secondaries = componentsMenuModel.secondaryChartOptions.filter(function(option) {
+                    charts.secondaries = selectorsModel.secondaryChartOptions.filter(function(option) {
                         return option.isSelected;
                     });
                     // TODO: This doesn't seem to be a concern of menu.
@@ -328,8 +287,7 @@
 
             var dataInterface = initialiseDataInterface();
             headMenu = initialiseHeadMenu(dataInterface);
-            sideMenu = initialiseSideMenu();
-            componentsMenu = initialiseComponentsMenu();
+            selectors = initialiseSelectors();
 
             updateLayout();
             initialiseResize();

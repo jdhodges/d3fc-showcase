@@ -1,11 +1,7 @@
 (function(d3, fc, sc) {
     'use strict';
 
-    sc.menu.components = function() {
-
-        var lastSeries;
-        var lastIndicators;
-
+    sc.menu.selectors = function() {
         var dispatch = d3.dispatch(
             sc.event.primaryChartSeriesChange,
             sc.event.primaryChartIndicatorChange,
@@ -23,7 +19,7 @@
                 }
             });
 
-        var components = function(selection) {
+        var selectors = function(selection) {
             selection.each(function(model) {
                 var selection = d3.select(this);
 
@@ -31,14 +27,10 @@
                     return option.isSelected;
                 }).indexOf(true);
 
-                if (selectedSeriesIndex !== lastSeries) {
-                    lastSeries = selectedSeriesIndex;
-
-                    selection.select('#series-dropdown')
-                        .datum({options: model.seriesOptions,
-                                selectedIndex: selectedSeriesIndex})
-                        .call(primaryChartSeriesButtons);
-                }
+                selection.select('#series-dropdown')
+                    .datum({options: model.seriesOptions,
+                            selectedIndex: selectedSeriesIndex})
+                    .call(primaryChartSeriesButtons);
 
                 var indicators = model.indicatorOptions.concat(model.secondaryChartOptions);
 
@@ -50,18 +42,14 @@
                         return option;
                     });
 
-                if (!lastIndicators || selectedIndicatorIndexes.join() !== lastIndicators.join()) {
-                    lastIndicators = selectedIndicatorIndexes;
-
-                    selection.select('#indicator-dropdown')
-                        .datum({options: indicators,
-                                selected: selectedIndicatorIndexes})
-                        .call(indicatorToggle);
-                }
+                selection.select('#indicator-dropdown')
+                    .datum({options: indicators,
+                            selected: selectedIndicatorIndexes})
+                    .call(indicatorToggle);
 
             });
         };
 
-        return d3.rebind(components, dispatch, 'on');
+        return d3.rebind(selectors, dispatch, 'on');
     };
 })(d3, fc, sc);

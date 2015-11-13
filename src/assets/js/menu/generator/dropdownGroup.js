@@ -8,62 +8,55 @@
             .selector('ul')
             .element('ul');
 
-        var config;
-        var lastSelectedIndex;
-
         function dropdownGroup(selection) {
             var selectedIndex = selection.datum().selectedIndex || 0;
 
-            if (selectedIndex !== lastSelectedIndex) {
-                lastSelectedIndex = selectedIndex;
-                var model = selection.datum();
-                var ul = dataJoin(selection, [model.options]);
+            var model = selection.datum();
+            var ul = dataJoin(selection, [model.options]);
 
-                if (!config) {
-                    config = {};
-                    selection.each(function() {
-                        config.title = this.getAttribute('component-title');
-                        config.careted = this.hasAttribute('careted');
-                        config.listIcons = this.hasAttribute('list-icons');
-                        config.icon = this.hasAttribute('icon');
-                    });
-                }
+            var config = {};
 
-                ul.attr('class', 'dropdown-menu');
+            selection.each(function() {
+                config.title = this.getAttribute('component-title');
+                config.careted = this.hasAttribute('careted');
+                config.listIcons = this.hasAttribute('list-icons');
+                config.icon = this.hasAttribute('icon');
+            });
 
-                var li = ul.selectAll('li')
-                    .data(fc.util.fn.identity);
+            ul.attr('class', 'dropdown-menu');
 
-                li.enter()
-                    .append('li')
-                    .on('click', dispatch.optionChange)
-                    .append('a')
-                    .attr('href', '#')
-                    .each(function(d) {
-                        if (config.listIcons) {
-                            sc.util.getSVG(this, d.icon, function(element, svg) {
-                                element.appendChild(svg);
-                                element.innerHTML += d.displayString;
-                            });
-                        } else {
-                            this.textContent = d.displayString;
-                        }
-                    });
+            var li = ul.selectAll('li')
+                .data(fc.util.fn.identity);
 
-                selection.select('.dropdown-toggle').each(function() {
-                    if (config.icon) {
-                        sc.util.getSVG(this, model.options[selectedIndex].icon, function(element, svg) {
-                            element.innerHTML = '';
+            li.enter()
+                .append('li')
+                .on('click', dispatch.optionChange)
+                .append('a')
+                .attr('href', '#')
+                .each(function(d) {
+                    if (config.listIcons) {
+                        sc.util.getSVG(this, d.icon, function(element, svg) {
                             element.appendChild(svg);
+                            element.innerHTML += d.displayString;
                         });
                     } else {
-                        this.textContent = config.title || model.options[selectedIndex].displayString;
-                        if (config.careted) {
-                            this.innerHTML += '<span class="caret"></span>';
-                        }
+                        this.textContent = d.displayString;
                     }
                 });
-            }
+
+            selection.select('.dropdown-toggle').each(function() {
+                if (config.icon) {
+                    sc.util.getSVG(this, model.options[selectedIndex].icon, function(element, svg) {
+                        element.innerHTML = '';
+                        element.appendChild(svg);
+                    });
+                } else {
+                    this.textContent = config.title || model.options[selectedIndex].displayString;
+                    if (config.careted) {
+                        this.innerHTML += '<span class="caret"></span>';
+                    }
+                }
+            });
 
         }
 

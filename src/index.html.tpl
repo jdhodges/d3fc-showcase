@@ -23,18 +23,17 @@
     </div>
     <div class="row row-offcanvas-right primary-row">
         <div class="col-xs-12 col-sm-12 col-md-9 col-chart">
-            <div id="components">
-                <div id="series-dropdown" class="dropdown component-dropdown" icon list-icons>
-                    <button id="series-dropdown-button" class="dropdown-toggle component-dropdown-toggle" type="button" data-toggle="dropdown"></button>
+            <div id="selectors">
+                <div id="series-dropdown" class="dropdown selector-dropdown" icon list-icons>
+                    <button id="series-dropdown-button" class="dropdown-toggle selector-dropdown-toggle" type="button" data-toggle="dropdown"></button>
                 </div>
-                <div id="indicator-dropdown" class="dropdown component-dropdown" component-title="Add Indicator" list-icons>
-                    <button id="indicator-dropdown-button" class="dropdown-toggle component-dropdown-toggle" type="button" data-toggle="dropdown"></button>
+                <div id="indicator-dropdown" class="dropdown selector-dropdown" component-title="Add Indicator" list-icons>
+                    <button id="indicator-dropdown-button" class="dropdown-toggle selector-dropdown-toggle" type="button" data-toggle="dropdown"></button>
                 </div>
             </div>
             <div id="legend"></div>
             <div id="charts-container">
                 <svg id="primary-container"></svg>
-                <svg class="secondary-container"></svg>
                 <svg class="secondary-container"></svg>
                 <svg class="secondary-container"></svg>
                 <div id="x-axis-row">
@@ -45,12 +44,6 @@
                     <svg id="navbar-reset"></svg>
                 </div>
             </div>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-3 sidebar-offcanvas sidebar-menu">
-            <div class="series-buttons btn-group"></div>
-            <div class="y-value-accessor-buttons btn-group"></div>
-            <div class="indicator-buttons btn-group"></div>
-            <div class="secondary-chart-buttons btn-group"></div>
         </div>
     </div>
 </div>
