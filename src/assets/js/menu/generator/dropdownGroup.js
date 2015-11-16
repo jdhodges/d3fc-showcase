@@ -10,19 +10,11 @@
 
         function dropdownGroup(selection) {
             var selectedIndex = selection.datum().selectedIndex || 0;
-
             var model = selection.datum();
+
+            var config = model.config;
+
             var ul = dataJoin(selection, [model.options]);
-
-            var config = {};
-
-            selection.each(function() {
-                config.title = this.getAttribute('component-title');
-                config.careted = this.hasAttribute('careted');
-                config.listIcons = this.hasAttribute('list-icons');
-                config.icon = this.hasAttribute('icon');
-            });
-
             ul.attr('class', 'dropdown-menu');
 
             var li = ul.selectAll('li')
@@ -34,30 +26,44 @@
                 .append('a')
                 .attr('href', '#')
                 .each(function(d) {
+                    var currentSelection = d3.select(this);
+
                     if (config.listIcons) {
-                        sc.util.getSVG(this, d.icon, function(element, svg) {
-                            element.appendChild(svg);
-                            element.innerHTML += d.displayString;
+                        sc.util.getSVG(d.icon, function(svg) {
+                            currentSelection.html(function() {
+                                return svg.outerHTML + d.displayString;
+                            });
                         });
-                    } else {
-                        this.textContent = d.displayString;
+                        return;
                     }
+
+                    currentSelection.text(function() {
+                        return d.displayString;
+                    });
                 });
 
-            selection.select('.dropdown-toggle').each(function() {
-                if (config.icon) {
-                    sc.util.getSVG(this, model.options[selectedIndex].icon, function(element, svg) {
-                        element.innerHTML = '';
-                        element.appendChild(svg);
-                    });
-                } else {
-                    this.textContent = config.title || model.options[selectedIndex].displayString;
-                    if (config.careted) {
-                        this.innerHTML += '<span class="caret"></span>';
-                    }
-                }
-            });
+            selection.select('.dropdown-toggle')
+                .each(function() {
+                    var currentSelection = d3.select(this);
 
+                    if (config.icon) {
+                        sc.util.getSVG(model.options[selectedIndex].icon, function(svg) {
+                            currentSelection.html(function() {
+                                return svg.outerHTML;
+                            });
+                        });
+                    } else {
+                        currentSelection.text(function() {
+                            return config.title || model.options[selectedIndex].displayString;
+                        });
+                    }
+
+                    if (config.careted) {
+                        currentSelection
+                            .append('span')
+                            .attr('class', 'caret');
+                    }
+                });
         }
 
         d3.rebind(dropdownGroup, dispatch, 'on');

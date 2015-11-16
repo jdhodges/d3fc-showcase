@@ -13,7 +13,7 @@
 <div class="container" id="app-container">
     <div class="row row-offcanvas-right head-menu head-row">
         <div class="col-xs-12 col-sm-12 col-md-9 head-sub-row">
-            <div id="product-dropdown" class="dropdown product-dropdown" careted>
+            <div id="product-dropdown" class="dropdown product-dropdown">
                 <button id="product-dropdown-button" class="dropdown-toggle product-dropdown-toggle" type="button" data-toggle="dropdown"></button>
             </div>
             <div id="period-selector"></div>
@@ -24,10 +24,10 @@
     <div class="row row-offcanvas-right primary-row">
         <div class="col-xs-12 col-sm-12 col-md-9 col-chart">
             <div id="selectors">
-                <div id="series-dropdown" class="dropdown selector-dropdown" icon list-icons>
+                <div id="series-dropdown" class="dropdown selector-dropdown">
                     <button id="series-dropdown-button" class="dropdown-toggle selector-dropdown-toggle" type="button" data-toggle="dropdown"></button>
                 </div>
-                <div id="indicator-dropdown" class="dropdown selector-dropdown" component-title="Add Indicator" list-icons>
+                <div id="indicator-dropdown" class="dropdown selector-dropdown" list-icons>
                     <button id="indicator-dropdown-button" class="dropdown-toggle selector-dropdown-toggle" type="button" data-toggle="dropdown"></button>
                 </div>
             </div>

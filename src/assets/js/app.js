@@ -255,21 +255,23 @@
             return sc.menu.selectors()
                 .on(sc.event.primaryChartSeriesChange, function(series) {
                     primaryChartModel.series = series;
-                    selectOption(series, selectorsModel.seriesOptions);
+                    selectOption(series, selectorsModel.seriesSelector.options);
                     render();
                 })
                 .on(sc.event.primaryChartIndicatorChange, function(indicator) {
                     indicator.isSelected = !indicator.isSelected;
-                    primaryChartModel.indicators = selectorsModel.indicatorOptions.filter(function(option) {
-                        return option.isSelected;
-                    });
+                    primaryChartModel.indicators =
+                        selectorsModel.indicatorSelector.indicatorOptions.filter(function(option) {
+                            return option.isSelected;
+                        });
                     render();
                 })
                 .on(sc.event.secondaryChartChange, function(chart) {
                     chart.isSelected = !chart.isSelected;
-                    charts.secondaries = selectorsModel.secondaryChartOptions.filter(function(option) {
-                        return option.isSelected;
-                    });
+                    charts.secondaries =
+                        selectorsModel.indicatorSelector.secondaryChartOptions.filter(function(option) {
+                            return option.isSelected;
+                        });
                     // TODO: This doesn't seem to be a concern of menu.
                     charts.secondaries.forEach(function(chartOption) {
                         chartOption.option.on(sc.event.viewChange, onViewChange);

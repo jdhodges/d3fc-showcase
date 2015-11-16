@@ -23,16 +23,18 @@
             selection.each(function(model) {
                 var selection = d3.select(this);
 
-                var selectedSeriesIndex = model.seriesOptions.map(function(option) {
+                var selectedSeriesIndex = model.seriesSelector.options.map(function(option) {
                     return option.isSelected;
                 }).indexOf(true);
 
                 selection.select('#series-dropdown')
-                    .datum({options: model.seriesOptions,
+                    .datum({config: model.seriesSelector.config,
+                            options: model.seriesSelector.options,
                             selectedIndex: selectedSeriesIndex})
                     .call(primaryChartSeriesButtons);
 
-                var indicators = model.indicatorOptions.concat(model.secondaryChartOptions);
+                var indicators = model.indicatorSelector.indicatorOptions
+                    .concat(model.indicatorSelector.secondaryChartOptions);
 
                 var selectedIndicatorIndexes = indicators
                     .map(function(option, index) {
@@ -43,7 +45,8 @@
                     });
 
                 selection.select('#indicator-dropdown')
-                    .datum({options: indicators,
+                    .datum({config: model.indicatorSelector.config,
+                            options: indicators,
                             selected: selectedIndicatorIndexes})
                     .call(indicatorToggle);
 

@@ -25,6 +25,7 @@
                 var products = model.products;
                 selection.select('#product-dropdown')
                     .datum({
+                        config: model.productConfig,
                         options: products.map(sc.menu.productAdaptor),
                         selectedIndex: products.indexOf(model.selectedProduct)
                     })
