@@ -172,11 +172,9 @@
             var width = currentSeries.option.width(data);
 
             crosshair.decorate(function(selection) {
-                selection.enter()
-                    .classed('band', true);
+                selection.classed('band', true);
 
-                selection.enter()
-                    .selectAll('line')
+                selection.selectAll('line')
                     // TODO: hide horizontal annotation in styles, when classes are added in d3fc
                     .classed('hidden', function() {
                         if (this.hasAttribute('x2')) {
@@ -196,10 +194,10 @@
         }
 
         function lineCrosshair(selection) {
-            selection.enter()
-                .classed('band', false)
+            selection.classed('band', false)
                 .selectAll('line')
-                .style('stroke-width', null);
+                .style('stroke-width', null)
+                .attr('class', '');
         }
 
         function updateCrosshairDecorate(data) {
