@@ -22,11 +22,8 @@
             <p class="content">Loading...</p>
         </div>
         <div id="charts" class="col-md-12 hidden">
-            <div id="selectors">
-                <div id="series-dropdown" class="dropdown selector-dropdown"></div>
-                <div id="indicator-dropdown" class="dropdown selector-dropdown"></div>
-            </div>
-            <div id="legend"></div>
+    <div class="row row-offcanvas-right primary-row">
+        <div class="col-md-12 col-chart">
             <div id="charts-container">
                 <svg id="primary-container"></svg>
                 <svg class="secondary-container"></svg>
@@ -39,6 +36,31 @@
                     <svg id="navbar-container"></svg>
                     <svg id="navbar-reset"></svg>
                 </div>
+            </div>
+            <div id="overlay">
+                <div id="overlay-primary-container">
+                    <div id="overlay-head">
+                        <div id="selectors">
+                            <div id="series-dropdown" class="dropdown selector-dropdown"></div>
+                            <div id="indicator-dropdown" class="dropdown selector-dropdown"></div>
+                        </div>
+                        <div id="legend"></div>
+                    </div>
+                    <div class="overlay-bottom">
+                        <div class="edit-indicator-container"></div>
+                    </div>
+                </div>
+                <div class="overlay-secondary-container">
+                    <div class="edit-indicator-container"></div>
+                </div>
+                <div class="overlay-secondary-container">
+                    <div class="edit-indicator-container"></div>
+                </div>
+                <div class="overlay-secondary-container">
+                    <div class="edit-indicator-container"></div>
+                </div>
+                <div id="overlay-x-axis-row"></div>
+                <div id="overlay-navbar-container"></div>
             </div>
         </div>
     </div>
