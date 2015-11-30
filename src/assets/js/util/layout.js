@@ -14,11 +14,17 @@ export default function(containers, charts) {
         }
     }
     containers.secondaries
-      .filter(function(d, index) { return index < secondaryChartsShown; })
-      .style('flex', '1');
+        .filter(function(d, index) { return index < secondaryChartsShown; })
+        .style('flex', '1');
     containers.secondaries
-      .filter(function(d, index) { return index >= secondaryChartsShown; })
-      .style('flex', '0');
+        .filter(function(d, index) { return index >= secondaryChartsShown; })
+        .style('flex', '0');
+    containers.overlaySecondaries
+        .filter(function(d, index) { return index < secondaryChartsShown; })
+        .style('flex', '1');
+    containers.overlaySecondaries
+        .filter(function(d, index) { return index >= secondaryChartsShown; })
+        .style('flex', '0');
 
     var headRowHeight = parseInt(containers.app.select('.head-row').style('height'), 10);
     if (!renderedOnce) {

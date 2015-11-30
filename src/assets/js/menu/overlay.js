@@ -20,21 +20,18 @@ export default function() {
             var sel = d3.select(this);
 
             sel.select('#overlay-primary-container').select('.edit-indicator-container')
-                .datum({selectedIndicators: model.primaryModel.indicators})
+                .datum({selectedIndicators: model.primaryIndicators})
+                .call(primaryChartIndicatorToggle);
+
+            sel.select('#overlay-primary-container').select('.edit-indicator-container')
+                .datum({selectedIndicators: model.primaryIndicators})
                 .call(primaryChartIndicatorToggle);
 
             sel.selectAll('.overlay-secondary-container')
                 .each(function(d, i) {
                     var currentSelection = d3.select(this);
-                    var selectedIndicators;
 
-                    if (model.secondaryModel[i]) {
-                        currentSelection.style('flex', '1');
-                        selectedIndicators = [model.secondaryModel[i]];
-                    } else {
-                        currentSelection.style('flex', '0');
-                        selectedIndicators = [];
-                    }
+                    var selectedIndicators = model.secondaryIndicators[i] ? [model.secondaryIndicators[i]] : [];
 
                     currentSelection.select('.edit-indicator-container')
                         .datum({selectedIndicators: selectedIndicators})
