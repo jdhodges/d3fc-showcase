@@ -1,18 +1,18 @@
-#charts-container {
+#charts-container, #overlay {
     display: flex;
     flex-direction: column;
     width: 100%;
 
-  #primary-container {
+  #primary-container, #overlay-primary-container {
     width: 100%;
     flex: 5;
   }
 
-  .secondary-container {
+  .secondary-container, .overlay-secondary-container {
     flex: 1;
   }
 
-  #x-axis-row {
+  .x-axis-row {
     flex: 0 0 @x-axis-height;
     display: flex;
     flex-direction: row;
@@ -20,11 +20,11 @@
     #x-axis-container {
       flex: 1;
       height: @x-axis-height;
-      margin-right: @y-axis-width
+      margin-right: @y-axis-width;
     }
   }
 
-  #navbar-row {
+  #navbar-row, #overlay-navbar-row {
     flex: 0 0.5 @navigator-height;
     display: flex;
     flex-direction: row;

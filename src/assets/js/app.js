@@ -128,8 +128,7 @@ export default function() {
             .datum(selectorsModel)
             .call(selectors);
 
-        containers.overlay
-            .datum(overlayModel)
+        containers.overlay.datum(overlayModel)
             .call(overlay);
 
         if (layoutRedrawnInNextRender) {

@@ -11,5 +11,6 @@ export default {
     primaryChartSeriesChange: 'primaryChartSeriesChange',
     primaryChartYValueAccessorChange: 'primaryChartYValueAccessorChange',
     primaryChartIndicatorChange: 'primaryChartIndicatorChange',
-    secondaryChartChange: 'secondaryChartChange'
+    secondaryChartChange: 'secondaryChartChange',
+    indicatorChange: 'indicatorChange'
 };

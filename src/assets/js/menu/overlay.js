@@ -10,18 +10,14 @@ export default function() {
         event.secondaryChartChange);
 
     var primaryChartIndicatorToggle = editIndicatorGroup()
-        .on('click', dispatch[event.primaryChartIndicatorChange]);
+        .on(event.indicatorChange, dispatch[event.primaryChartIndicatorChange]);
 
     var secondaryChartToggle = editIndicatorGroup()
-        .on('click', dispatch[event.secondaryChartChange]);
+        .on(event.indicatorChange, dispatch[event.secondaryChartChange]);
 
     var overlay = function(selection) {
         selection.each(function(model) {
             var sel = d3.select(this);
-
-            sel.select('#overlay-primary-container').select('.edit-indicator-container')
-                .datum({selectedIndicators: model.primaryIndicators})
-                .call(primaryChartIndicatorToggle);
 
             sel.select('#overlay-primary-container').select('.edit-indicator-container')
                 .datum({selectedIndicators: model.primaryIndicators})

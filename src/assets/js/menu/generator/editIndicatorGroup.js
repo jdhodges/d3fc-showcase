@@ -1,41 +1,40 @@
 import d3 from 'd3';
 import fc from 'd3fc';
+import event from '../../event';
 
 export default function() {
-    var dispatch = d3.dispatch('click');
+    var dispatch = d3.dispatch(event.indicatorChange);
 
     function editIndicatorGroup(selection) {
         selection.each(function(model) {
             var sel = d3.select(this);
 
             var div = sel.selectAll('div')
-                .data(model.selectedIndicators);
-
-            div.enter()
-                .append('div')
-                .attr('class', 'edit-indicator')
-                .each(function(d) {
-                    var enter = d3.select(this);
-
-                    enter.append('span')
-                        .attr('class', 'icon sc-icon-delete');
-
-                    enter.append('span')
-                        .attr('class', 'indicator-label');
+                .data(model.selectedIndicators, function(d) {
+                    return d.valueString;
                 });
 
-            div.select('.indicator-label')
+            var containersEnter = div.enter()
+                .append('div')
+                .attr('class', 'edit-indicator');
+
+            containersEnter.append('span')
+                .attr('class', 'icon sc-icon-delete')
+                .on('click', dispatch.indicatorChange);
+
+            containersEnter.append('span')
+                .attr('class', 'indicator-label')
                 .text(function(d) {
                     return d.displayString;
                 });
 
-            div.select('.icon').on('click', dispatch.click);
-
-            div.exit().remove();
+            div.exit()
+                .remove();
         });
     }
 
     d3.rebind(editIndicatorGroup, dispatch, 'on');
 
     return editIndicatorGroup;
+
 }

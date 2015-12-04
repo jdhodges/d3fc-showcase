@@ -1,33 +1,25 @@
 #overlay {
-  display: flex;
-  flex-direction: column;
   height: 100%;
-  width: 100%;
   position:absolute;
   top:0;
-  left:0;
-  right:0;
-  bottom:0;
-  background-color: transparent;
   pointer-events: none;
-  padding-left: 15px;
+  padding-right: @bootstrap-padding-width;
 
   #overlay-primary-container {
-    flex: 5;
     display: flex;
     flex-direction: column;
-  }
 
-  #overlay-head {
-    display: flex;
-    flex-direction: column;
-    flex: 0 0 40px
-  }
+    #overlay-primary-head {
+      display: flex;
+      flex-direction: column;
+      flex: 0 0 40px;
+    }
 
-  .overlay-bottom {
-    flex: 1;
-    display: flex;
-    align-items: flex-end;
+    #overlay-primary-bottom {
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+    }
   }
 
   .edit-indicator-container {
@@ -36,21 +28,9 @@
   }
 
   .overlay-secondary-container {
-    flex: 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-  }
-
-  #overlay-x-axis-row {
-    flex: 0 0 20px;
-    display: flex;
-    flex-direction: row;
-  }
-
-  #overlay-navbar-container {
-    flex: 0 0 100px;
-    flex-direction: row;
   }
 
   .edit-indicator {
