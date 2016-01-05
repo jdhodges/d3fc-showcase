@@ -4,7 +4,6 @@ export default function() {
     var formatPrice;
     var formatVolume;
     var formatTime;
-    var lastDataPointDisplayed;
 
     var legendItems = [
         'T',
@@ -29,25 +28,17 @@ export default function() {
             formatVolume = model.product.volumeFormat;
             formatTime = model.period.timeFormat;
 
-            if (model.data == null || model.data !== lastDataPointDisplayed) {
-                lastDataPointDisplayed = model.data;
+            container.classed('hidden', !model.data);
 
+            if (model.data) {
                 var span = container.selectAll('span')
-                  .data(legendItems);
+                    .data(legendItems);
 
                 span.enter()
-                  .append('span')
-                  .attr('class', function(d, i) { return i % 2 === 0 ? 'legendLabel' : 'legendValue'; });
+                    .append('span')
+                    .attr('class', function(d, i) { return i % 2 === 0 ? 'legendLabel' : 'legendValue'; });
 
-                span.text(function(d, i) {
-                    var text = '';
-                    if (i % 2 === 0) {
-                        return d;
-                    } else if (model.data) {
-                        return d(model.data);
-                    }
-                    return text;
-                });
+                span.text(function(d) { return d3.functor(d)(model.data); });
             }
         });
     }
