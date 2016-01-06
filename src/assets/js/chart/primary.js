@@ -52,27 +52,30 @@ export default function() {
 
     var crosshairData = [];
     var crosshair = fc.tool.crosshair()
-      .xLabel('')
-      .yLabel('')
-      .on('trackingmove', function(updatedCrosshairData) {
-          if (updatedCrosshairData.length > 0) {
-              dispatch.crosshairChange(updatedCrosshairData[0].datum);
-          } else {
-              dispatch.crosshairChange(undefined);
-          }
-      })
-      .on('trackingend', function() {
-          dispatch.crosshairChange(undefined);
-      });
+        .xLabel('')
+        .yLabel('')
+        .on('trackingmove', function(updatedCrosshairData) {
+            d3.select('.crosshair')
+                .classed('hidden', false);
+
+            if (updatedCrosshairData.length > 0) {
+                dispatch.crosshairChange(updatedCrosshairData[0].datum);
+            } else {
+                dispatch.crosshairChange(undefined);
+            }
+        })
+        .on('trackingend', function() {
+            dispatch.crosshairChange(undefined);
+        });
     crosshair.id = util.uid();
 
     var gridlines = fc.annotation.gridline()
-      .yTicks(5)
-      .xTicks(0);
+        .yTicks(5)
+        .xTicks(0);
     var closeLine = fc.annotation.line()
-      .orient('horizontal')
-      .value(currentYValueAccessor)
-      .label('');
+        .orient('horizontal')
+        .value(currentYValueAccessor)
+        .label('');
     closeLine.id = util.uid();
 
     var multi = fc.series.multi()
@@ -92,14 +95,14 @@ export default function() {
     var yScale = d3.scale.linear();
 
     var primaryChart = fc.chart.cartesian(xScale, yScale)
-      .xTicks(0)
-      .yOrient('right')
-      .margin({
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: yAxisWidth
-      });
+        .xTicks(0)
+        .yOrient('right')
+        .margin({
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: yAxisWidth
+        });
 
     // Create and apply the Moving Average
     var movingAverage = fc.indicator.algorithm.movingAverage();
@@ -144,7 +147,7 @@ export default function() {
             selection.classed('band hidden-xs hidden-sm', true);
 
             selection.selectAll('.vertical > line')
-              .style('stroke-width', width);
+                .style('stroke-width', width);
         });
     }
 
@@ -209,14 +212,17 @@ export default function() {
         selection.call(primaryChart);
 
         var zoom = zoomBehavior(zoomWidth)
-          .scale(xScale)
-          .trackingLatest(model.trackingLatest)
-          .on('zoom', function(domain) {
-              dispatch[event.viewChange](domain);
-          });
+            .scale(xScale)
+            .trackingLatest(model.trackingLatest)
+            .on('zoom', function(domain) {
+                d3.select('.crosshair')
+                    .classed('hidden', true);
+                dispatch.crosshairChange(undefined);
+                dispatch[event.viewChange](domain);
+            });
 
         selection.select('.plot-area')
-          .call(zoom);
+            .call(zoom);
     }
 
     d3.rebind(primary, dispatch, 'on');
