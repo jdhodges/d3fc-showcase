@@ -55,9 +55,6 @@ export default function() {
         .xLabel('')
         .yLabel('')
         .on('trackingmove', function(updatedCrosshairData) {
-            d3.select('.crosshair')
-                .classed('hidden', false);
-
             if (updatedCrosshairData.length > 0) {
                 dispatch.crosshairChange(updatedCrosshairData[0].datum);
             } else {
@@ -140,29 +137,16 @@ export default function() {
         model.selectorsChanged = false;
     }
 
-    function bandCrosshair(data) {
-        var width = currentSeries.option.width(data);
+    function updateCrosshairDecorate(display, data) {
+        var isBandCrosshair = currentSeries.valueString === 'candlestick' || currentSeries.valueString === 'ohlc';
 
         crosshair.decorate(function(selection) {
-            selection.classed('band hidden-xs hidden-sm', true);
-
-            selection.selectAll('.vertical > line')
-                .style('stroke-width', width);
+            selection.classed('hidden-xs hidden-sm', true)
+                .classed('band', isBandCrosshair)
+                .classed('hidden', !display)
+                .selectAll('line')
+                .style('stroke-width', isBandCrosshair ? currentSeries.option.width(data) : null);
         });
-    }
-
-    function lineCrosshair(selection) {
-        selection.classed('band', false)
-            .classed('hidden-xs hidden-sm', true)
-            .selectAll('line')
-            .style('stroke-width', null);
-    }
-    function updateCrosshairDecorate(data) {
-        if (currentSeries.valueString === 'candlestick' || currentSeries.valueString === 'ohlc') {
-            bandCrosshair(data);
-        } else {
-            crosshair.decorate(lineCrosshair);
-        }
     }
 
     function primary(selection) {
@@ -175,7 +159,7 @@ export default function() {
         primaryChart.xDomain(model.viewDomain);
 
         crosshair.snap(fc.util.seriesPointSnapXOnly(currentSeries.option, model.data));
-        updateCrosshairDecorate(model.data);
+        updateCrosshairDecorate(model.displayCrosshair, model.data);
 
         movingAverage(model.data);
         bollingerAlgorithm(model.data);
@@ -215,8 +199,6 @@ export default function() {
             .scale(xScale)
             .trackingLatest(model.trackingLatest)
             .on('zoom', function(domain) {
-                d3.select('.crosshair')
-                    .classed('hidden', true);
                 dispatch.crosshairChange(undefined);
                 dispatch[event.viewChange](domain);
             });

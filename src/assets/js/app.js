@@ -204,6 +204,7 @@ export default function() {
 
     function onCrosshairChange(dataPoint) {
         model.legend.data = dataPoint;
+        model.primaryChart.displayCrosshair = dataPoint !== undefined;
         render();
     }
 

@@ -7,7 +7,8 @@ export default function(initialProduct) {
         data: [],
         trackingLatest: true,
         viewDomain: [],
-        selectorsChanged: true
+        selectorsChanged: true,
+        displayCrosshair: false
     };
 
     var _product = initialProduct;
