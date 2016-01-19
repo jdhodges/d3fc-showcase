@@ -142,8 +142,11 @@ export default function() {
         });
     }
 
-    function addNotification(message) {
-        model.notificationMessages.messages.unshift(messageModel(message));
+    function addNotification(messageBody) {
+        var message = messageModel(messageBody);
+        model.notificationMessages.messages.unshift(message);
+
+        setTimeout(onNotificationClose, message.timeout, message.id);
     }
 
     function onViewChange(domain) {
