@@ -146,8 +146,7 @@ export default function() {
         model.notificationMessages.messages.unshift(messageModel(message));
     }
 
-    function onViewChange(domain) {
-        var viewDomain = [domain[0], domain[1]];
+    function updateModelViewDomain(viewDomain) {
         model.charts.primary.viewDomain = viewDomain;
         model.charts.secondary.viewDomain = viewDomain;
         model.charts.xAxis.viewDomain = viewDomain;
@@ -164,17 +163,26 @@ export default function() {
         model.charts.secondary.trackingLatest = trackingLatest;
         model.charts.trackingLatest = trackingLatest;
         model.navReset.trackingLatest = trackingLatest;
+    }
+
+    function onViewChange(viewDomain) {
+        window.localStorage.setItem('domain', JSON.stringify(viewDomain));
+        updateModelViewDomain(viewDomain);
         render();
     }
 
-    function onPrimaryIndicatorChange(indicator) {
+    function toggleIndicator(indicator) {
         indicator.isSelected = !indicator.isSelected;
+    }
+
+    function onPrimaryIndicatorChange(indicator) {
+        toggleIndicator(indicator);
         updatePrimaryChartIndicators();
         render();
     }
 
-    function onSecondaryChartChange(_chart) {
-        _chart.isSelected = !_chart.isSelected;
+    function onSecondaryChartChange(indicator) {
+        toggleIndicator(indicator);
         updateSecondaryCharts();
         render();
     }
@@ -200,6 +208,25 @@ export default function() {
         }
     }
 
+    function loadDomain() {
+        var loadedDomain = JSON.parse(window.localStorage.getItem('domain'));
+
+        var viewDomain = loadedDomain && loadedDomain.map(function(item) {
+            return new Date(item);
+        });
+
+        var dataDomain = fc.util.extent()
+            .fields('date')(model.charts.primary.data);
+
+        var exceedsCurrentDomain = viewDomain && (viewDomain[0] < dataDomain[0] || viewDomain[1] > dataDomain[1]);
+
+        if (!viewDomain || exceedsCurrentDomain) {
+            resetToLatest();
+        } else {
+            updateModelViewDomain(viewDomain);
+        }
+    }
+
     function resetToLatest() {
         var data = model.charts.primary.data;
         var dataDomain = fc.util.extent()
@@ -209,7 +236,14 @@ export default function() {
             dataDomain,
             data,
             proportionOfDataToDisplayByDefault);
-        onViewChange(navTimeDomain);
+        updateModelViewDomain(navTimeDomain);
+    }
+
+    function hideChart(hide) {
+        var visibility = 'visibility: ' + (hide ? 'hidden' : 'visible');
+
+        containers.headRow.attr('style', visibility);
+        containers.primaryRow.attr('style', visibility);
     }
 
     function loading(isLoading, error) {
@@ -242,6 +276,7 @@ export default function() {
     }
 
     function updateModelSelectedProduct(product) {
+        window.localStorage.setItem('product', product.display);
         model.headMenu.selectedProduct = product;
         model.overlay.selectedProduct = product;
         model.charts.primary.product = product;
@@ -252,16 +287,17 @@ export default function() {
     }
 
     function updateModelSelectedPeriod(period) {
+        window.localStorage.setItem('period', period.display);
         model.headMenu.selectedPeriod = period;
         model.charts.xAxis.period = period;
         model.charts.legend.period = period;
     }
 
-    function changeProduct(product) {
+    function changeProduct(product, period) {
         loading(true);
         updateModelSelectedProduct(product);
-        updateModelSelectedPeriod(product.periods[0]);
-        _dataInterface(product.periods[0].seconds, product);
+        updateModelSelectedPeriod(period || product.periods[0]);
+        _dataInterface(period ? period.seconds : product.periods[0].seconds, product);
     }
 
     function initialiseCharts() {
@@ -288,13 +324,18 @@ export default function() {
                 }
             })
             .on(event.historicDataLoaded, function(data) {
+                hideChart(false);
                 loading(false);
                 updateModelData(data);
                 model.charts.legend.data = null;
                 resetToLatest();
+                loadDomain();
                 updateLayout();
+                render();
             })
             .on(event.historicFeedError, function(err, source) {
+                hideChart(false);
+
                 if (externalHistoricFeedErrorCallback) {
                     var error = externalHistoricFeedErrorCallback(err) || true;
                     loading(false, error);
@@ -324,11 +365,13 @@ export default function() {
     function initialiseHeadMenu() {
         return menu.head()
             .on(event.dataProductChange, function(product) {
+                window.localStorage.removeItem('domain');
                 changeProduct(product.option);
                 render();
             })
             .on(event.dataPeriodChange, function(period) {
                 loading(true);
+                window.localStorage.removeItem('domain');
                 updateModelSelectedPeriod(period.option);
                 _dataInterface(period.option.seconds);
                 render();
@@ -343,47 +386,59 @@ export default function() {
             });
     }
 
-    function selectOption(option, options) {
-        options.forEach(function(_option) {
-            _option.isSelected = false;
+    function deselectOption(option) { option.isSelected = false; }
+
+    function updateModelSeries(series) {
+        model.charts.primary.series = series;
+
+        model.selectors.seriesSelector.options.forEach(function(_option) {
+            _option.isSelected = _option.valueString === series.valueString;
         });
-        option.isSelected = true;
     }
 
-    function deselectOption(option) { option.isSelected = false; }
+    function onSeriesChange(series) {
+        window.localStorage.setItem('series', series.valueString);
+        updateModelSeries(series);
+        render();
+    }
 
     function initialiseSelectors() {
         return menu.selectors()
-            .on(event.primaryChartSeriesChange, function(series) {
-                model.charts.primary.series = series;
-                selectOption(series, model.selectors.seriesSelector.options);
-                render();
-            })
+            .on(event.primaryChartSeriesChange, onSeriesChange)
             .on(event.primaryChartIndicatorChange, onPrimaryIndicatorChange)
             .on(event.secondaryChartChange, onSecondaryChartChange);
     }
 
     function updatePrimaryChartIndicators() {
-        model.charts.primary.indicators =
-            model.selectors.indicatorSelector.options.filter(function(option) {
-                return option.isSelected && option.isPrimary;
-            });
+        var _indicators = model.selectors.indicatorSelector.options.filter(function(option) {
+            return option.isSelected && option.isPrimary;
+        });
 
-        model.overlay.primaryIndicators = model.charts.primary.indicators;
-        model.headMenu.primaryIndicators = model.charts.primary.indicators;
+        window.localStorage.setItem('primaryIndicators', JSON.stringify(_indicators.map(function(indicator) {
+            return indicator.valueString;
+        })));
+
+        model.charts.primary.indicators = _indicators;
+        model.headMenu.primaryIndicators = _indicators;
+        model.overlay.primaryIndicators = _indicators;
     }
 
     function updateSecondaryChartModels() {
-        model.charts.secondary.indicators = model.selectors.indicatorSelector.options.filter(function(option) {
+        var _indicators = model.selectors.indicatorSelector.options.filter(function(option) {
             return option.isSelected && !option.isPrimary;
         });
 
-        charts.secondaries().charts(model.charts.secondary.indicators.map(function(indicator) {
+        window.localStorage.setItem('secondaryIndicators', JSON.stringify(_indicators.map(function(indicator) {
+            return indicator.valueString;
+        })));
+
+        charts.secondaries().charts(_indicators.map(function(indicator) {
             return indicator;
         }));
 
-        model.overlay.secondaryIndicators = model.charts.secondary.indicators;
-        model.headMenu.secondaryIndicators = model.charts.secondary.indicators;
+        model.charts.secondary.indicators = _indicators;
+        model.overlay.secondaryIndicators = _indicators;
+        model.headMenu.secondaryIndicators = _indicators;
     }
 
     function updateSecondaryCharts() {
@@ -425,7 +480,29 @@ export default function() {
             model.overlay.products = model.headMenu.products;
         }
 
-        render();
+        loadPreviousSession();
+    }
+
+    function loadPreviousSession() {
+        var selectedProduct = model.headMenu.products[Object.keys(model.headMenu.products).filter(function(key) {
+            return model.headMenu.products[key].display === window.localStorage.getItem('product');
+        })[0]] || model.headMenu.selectedProduct;
+
+        var selectedPeriod = selectedProduct && selectedProduct.periods.filter(function(period) {
+            return period.display === window.localStorage.getItem('period');
+        })[0] || selectedProduct.periods[0];
+
+        var selectedSeries = model.selectors.seriesSelector.options.filter(function(series) {
+            return series.valueString === window.localStorage.getItem('series');
+        })[0] || model.primaryChart.series;
+
+        var loadedPrimaryIndicators = JSON.parse(window.localStorage.getItem('primaryIndicators'));
+
+        var loadedSecondaryIndicators = JSON.parse(window.localStorage.getItem('secondaryIndicators'));
+
+        changeProduct(selectedProduct, selectedPeriod);
+        updateModelSeries(selectedSeries);
+        app.indicators(loadedPrimaryIndicators.concat(loadedSecondaryIndicators));
     }
 
     app.fetchCoinbaseProducts = function(x) {
@@ -520,6 +597,8 @@ export default function() {
             overlay: overlayContainer,
             overlaySecondaries: overlayContainer.select('#overlay-secondaries-container'),
             legend: appContainer.select('#legend'),
+            headRow: appContainer.select('.head-row'),
+            primaryRow: appContainer.select('.primary-row'),
             suspendLayout: function(value) {
                 var self = this;
                 Object.keys(self).forEach(function(key) {
@@ -539,6 +618,9 @@ export default function() {
         updateLayout();
         initialiseResize();
         _dataInterface(model.headMenu.selectedPeriod.seconds, model.headMenu.selectedProduct);
+
+        hideChart(true);
+        loading(true);
 
         if (fetchCoinbaseProducts) {
             getCoinbaseProducts(addCoinbaseProducts);

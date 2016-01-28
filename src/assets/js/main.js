@@ -9,6 +9,8 @@ if (seed) {
     Math.seedrandom(seed);
 }
 
-BitFlux.app()
-    .fetchCoinbaseProducts(true)
-    .run('#app-container');
+var app = BitFlux.app()
+    .fetchCoinbaseProducts(true);
+
+app.run('#app-container');
+
