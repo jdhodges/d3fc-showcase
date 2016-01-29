@@ -39,6 +39,10 @@ export default function() {
 
             var options = model.indicatorSelector.options;
 
+            var unselectedOptions = options.filter(function(option) {
+                return !option.isSelected;
+            });
+
             var selectedIndicatorIndexes = options
                 .map(function(option, index) {
                     return option.isSelected ? index : null;
@@ -50,7 +54,7 @@ export default function() {
             container.select('#indicator-dropdown')
                 .datum({
                     config: model.indicatorSelector.config,
-                    options: options,
+                    options: unselectedOptions,
                     selected: selectedIndicatorIndexes
                 })
                 .call(indicatorToggle);

@@ -33,6 +33,13 @@ export default function() {
         var selectedIndex = model.selectedIndex || 0;
         var config = model.config;
 
+        if (model.options.length) {
+            selection.classed('hidden', false);
+        } else {
+            selection.classed('hidden', true);
+            return;
+        }
+
         var button = buttonDataJoin(selection, [model.options]);
 
         if (config.icon) {
