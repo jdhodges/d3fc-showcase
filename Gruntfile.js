@@ -31,6 +31,7 @@ module.exports = function(grunt) {
                 'assets/js/svg-innerhtml.js',
                 'assets/js/d3fc.js',
                 'assets/js/jquery.js',
+                'assets/js/seedrandom.js',
                 'assets/js/bootstrap.js'
             ],
             vendorJsFiles: [
@@ -40,6 +41,7 @@ module.exports = function(grunt) {
                 'node_modules/d3fc/node_modules/svg-innerhtml/svg-innerhtml.js',
                 'node_modules/d3fc/dist/d3fc.min.js',
                 'node_modules/jquery/dist/jquery.min.js',
+                'node_modules/seedrandom/seedrandom.min.js',
                 'node_modules/bootstrap/dist/js/bootstrap.min.js'
             ],
             coverageDir: 'coverage'
@@ -115,7 +117,14 @@ module.exports = function(grunt) {
                     src: ['jquery.js'],
                     dest: 'dist/assets/js',
                     expand: true
-                }]
+                },
+                {
+                    cwd: 'node_modules/seedrandom',
+                    src: ['seedrandom.js'],
+                    dest: 'dist/assets/js',
+                    expand: true
+                }
+                ]
             },
             icons: {
                 files: [{

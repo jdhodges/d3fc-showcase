@@ -24,9 +24,10 @@
   "homepage": "https://github.com/scottlogic/BitFlux#readme",
   "dependencies": {
     "bootstrap": "^3.3.6",
-    "d3fc": "^5.2.0",
     "d3": "^3.5.12",
-    "jquery": "^2.2.0"
+    "d3fc": "^5.2.0",
+    "jquery": "^2.2.0",
+    "seedrandom": "^2.4.2"
   },
   "devDependencies": {
     "babel-plugin-transform-es2015-modules-commonjs": "^6.4.0",

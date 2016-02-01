@@ -447,6 +447,11 @@ export default function() {
             throw new Error('An element must be specified when running the application.');
         }
 
+        var seed = window.location.search.split('seed=')[1];
+        if (seed) {
+            Math.seedrandom(seed);
+        }
+
         var appContainer = d3.select(element);
         appContainer.html(appTemplate);
 
