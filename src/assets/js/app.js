@@ -236,14 +236,12 @@ export default function() {
             dataDomain,
             data,
             proportionOfDataToDisplayByDefault);
-        updateModelViewDomain(navTimeDomain);
+        onViewChange(navTimeDomain);
     }
 
     function hideChart(hide) {
-        var visibility = 'visibility: ' + (hide ? 'hidden' : 'visible');
-
-        containers.headRow.attr('style', visibility);
-        containers.primaryRow.attr('style', visibility);
+        containers.headRow.classed('hidden', hide);
+        containers.primaryRow.classed('hidden', hide);
     }
 
     function loading(isLoading, error) {
@@ -479,8 +477,6 @@ export default function() {
             model.headMenu.products = model.headMenu.products.concat(formattedProducts);
             model.overlay.products = model.headMenu.products;
         }
-
-        loadPreviousSession();
     }
 
     function loadPreviousSession() {
@@ -623,9 +619,13 @@ export default function() {
         loading(true);
 
         if (fetchCoinbaseProducts) {
-            getCoinbaseProducts(addCoinbaseProducts);
+            getCoinbaseProducts(function(error, response) {
+                addCoinbaseProducts(error, response);
+                loadPreviousSession();
+            });
         } else if (model.sources.bitcoin) {
             delete model.sources.bitcoin;
+            loadPreviousSession();
         }
     };
 
