@@ -123,8 +123,7 @@ module.exports = function(grunt) {
                     src: ['seedrandom.js'],
                     dest: 'dist/assets/js',
                     expand: true
-                }
-                ]
+                }]
             },
             icons: {
                 files: [{
