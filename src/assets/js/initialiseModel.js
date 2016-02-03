@@ -127,15 +127,24 @@ export default function() {
         bollingerBandsOption.option.extentAccessor = [function(d) { return d.bollingerBands.lower; },
             function(d) { return d.bollingerBands.upper; }];
 
+        var rsi = secondary.rsi();
+        rsi.id = util.uid();
+
+        var macd = secondary.macd();
+        macd.id = util.uid();
+
+        var volume = secondary.volume();
+        volume.id = util.uid();
+
         var indicators = [
             movingAverageOption,
             bollingerBandsOption,
             model.menu.option('Relative Strength Index', 'rsi',
-                secondary.rsi(), 'bf-icon-rsi-indicator', false),
+                rsi, 'bf-icon-rsi-indicator', false),
             model.menu.option('MACD', 'macd',
-                secondary.macd(), 'bf-icon-macd-indicator', false),
+                macd, 'bf-icon-macd-indicator', false),
             model.menu.option('Volume', 'volume',
-                secondary.volume(), 'bf-icon-bar-series', false)
+                volume, 'bf-icon-bar-series', false)
         ];
 
         return indicators;

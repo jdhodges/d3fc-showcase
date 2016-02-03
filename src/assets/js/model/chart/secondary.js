@@ -5,6 +5,7 @@ export default function(initialProduct, initialDiscontinuityProvider) {
         viewDomain: [],
         trackingLatest: true,
         product: initialProduct,
-        discontinuityProvider: initialDiscontinuityProvider
+        discontinuityProvider: initialDiscontinuityProvider,
+        indicators: []
     };
 }
