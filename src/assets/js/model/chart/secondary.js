@@ -3,6 +3,7 @@ export default function(initialProduct) {
         data: [],
         viewDomain: [],
         trackingLatest: true,
-        product: initialProduct
+        product: initialProduct,
+        indicators: []
     };
 }

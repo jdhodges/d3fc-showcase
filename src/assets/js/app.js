@@ -31,9 +31,7 @@ export default function() {
             <div id="charts" class="col-md-12"> \
                 <div id="charts-container"> \
                     <svg id="primary-container"></svg> \
-                    <svg class="secondary-container"></svg> \
-                    <svg class="secondary-container"></svg> \
-                    <svg class="secondary-container"></svg> \
+                    <div id="secondaries-container"></div> \
                     <div class="x-axis-row"> \
                         <svg id="x-axis-container"></svg> \
                     </div> \
@@ -55,15 +53,7 @@ export default function() {
                             <div class="edit-indicator-container"></div> \
                         </div> \
                     </div> \
-                    <div class="overlay-secondary-container"> \
-                        <div class="edit-indicator-container"></div> \
-                    </div> \
-                    <div class="overlay-secondary-container"> \
-                        <div class="edit-indicator-container"></div> \
-                    </div> \
-                    <div class="overlay-secondary-container"> \
-                        <div class="edit-indicator-container"></div> \
-                    </div> \
+                    <div id="overlay-secondaries-container"></div> \
                     <div class="x-axis-row"></div> \
                     <div id="overlay-navbar-row"></div> \
                 </div> \
@@ -111,14 +101,7 @@ export default function() {
             .call(charts.legend);
 
         containers.secondaries.datum(model.secondaryChart)
-            // TODO: Add component: group of secondary charts.
-            // Then also move method layout.getSecondaryContainer into the group.
-            .filter(function(d, i) { return i < charts.secondaries.length; })
-            .each(function(d, i) {
-                d3.select(this)
-                    .attr('class', 'secondary-container ' + charts.secondaries[i].valueString)
-                    .call(charts.secondaries[i].option);
-            });
+            .call(charts.secondaries);
 
         containers.xAxis.datum(model.xAxis)
             .call(charts.xAxis);
@@ -270,6 +253,13 @@ export default function() {
             .on(event.viewChange, onViewChange);
     }
 
+    function initialiseSecondaries() {
+        return chart.multiChart()
+            .on(event.viewChange, function(domain) {
+                onViewChange(domain);
+            });
+    }
+
     function initialiseNav() {
         return chart.nav()
             .on(event.viewChange, onViewChange);
@@ -334,7 +324,7 @@ export default function() {
             })
             .on(event.clearAllPrimaryChartIndicatorsAndSecondaryCharts, function() {
                 model.primaryChart.indicators.forEach(deselectOption);
-                charts.secondaries.forEach(deselectOption);
+                model.secondaryChart.indicators.forEach(deselectOption);
 
                 updatePrimaryChartIndicators();
                 updateSecondaryCharts();
@@ -372,18 +362,16 @@ export default function() {
     }
 
     function updateSecondaryCharts() {
-        charts.secondaries =
-            model.selectors.indicatorSelector.options.filter(function(option) {
-                return option.isSelected && !option.isPrimary;
-            });
-        // TODO: This doesn't seem to be a concern of menu.
-        charts.secondaries.forEach(function(chartOption) {
-            chartOption.option.on(event.viewChange, onViewChange);
+        model.secondaryChart.indicators = model.selectors.indicatorSelector.options.filter(function(option) {
+            return option.isSelected && !option.isPrimary;
         });
 
-        model.overlay.secondaryIndicators = charts.secondaries;
-        // TODO: Remove .remove! (could a secondary chart group component manage this?).
-        containers.secondaries.selectAll('*').remove();
+        charts.secondaries.charts(model.secondaryChart.indicators.map(function(indicator) {
+            return indicator.option;
+        }));
+
+        model.overlay.secondaryIndicators = model.secondaryChart.indicators;
+
         updateLayout();
     }
 
@@ -458,11 +446,11 @@ export default function() {
             charts: chartsContainer,
             chartsAndOverlay: chartsAndOverlayContainer,
             primary: chartsContainer.select('#primary-container'),
-            secondaries: chartsContainer.selectAll('.secondary-container'),
+            secondaries: chartsContainer.select('#secondaries-container'),
             xAxis: chartsContainer.select('#x-axis-container'),
             navbar: chartsContainer.select('#navbar-container'),
             overlay: overlayContainer,
-            overlaySecondaries: overlayContainer.selectAll('.overlay-secondary-container'),
+            overlaySecondaries: overlayContainer.selectAll('#overlay-secondaries-container'),
             legend: appContainer.select('#legend'),
             suspendLayout: function(value) {
                 var self = this;
@@ -475,6 +463,7 @@ export default function() {
         };
 
         charts.primary = initialisePrimaryChart();
+        charts.secondaries = initialiseSecondaries();
         charts.navbar = initialiseNav();
 
         _dataInterface = initialiseDataInterface();
