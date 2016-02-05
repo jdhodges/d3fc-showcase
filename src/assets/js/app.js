@@ -142,11 +142,8 @@ export default function() {
         });
     }
 
-    function addNotification(messageBody) {
-        var message = messageModel(messageBody);
-        model.notificationMessages.messages.unshift(message);
-
-        setTimeout(onNotificationClose, message.timeout, message.id);
+    function addNotification(message) {
+        model.notificationMessages.messages.unshift(messageModel(message));
     }
 
     function onViewChange(domain) {
@@ -411,7 +408,8 @@ export default function() {
 
     function initialiseNotifications() {
         return notification.toast()
-            .on(event.notificationClose, onNotificationClose);
+            .on(event.notificationClose, onNotificationClose)
+            .timeout(5000);
     }
 
     function addCoinbaseProducts(error, bitcoinProducts) {

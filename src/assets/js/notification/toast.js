@@ -4,6 +4,8 @@ import event from '../event';
 
 export default function() {
 
+    var timeout;
+
     var dispatch = d3.dispatch(event.notificationClose);
 
     var panelDataJoin = fc.util.dataJoin()
@@ -17,6 +19,8 @@ export default function() {
         .attr({'class': 'alert alert-info alert-dismissible', 'role': 'alert'})
         .key(function(d) { return d.id; });
 
+    function closeNotification(d) { dispatch[event.notificationClose](d.id); }
+
     var toast = function(selection) {
         selection.each(function(model) {
             var container = d3.select(this);
@@ -27,6 +31,13 @@ export default function() {
             var toasts = toastDataJoin(panel.select('.messages'), model.messages);
 
             var toastsEnter = toasts.enter();
+
+            toastsEnter.each(function(d) {
+                if (timeout) {
+                    setTimeout(closeNotification, timeout, d);
+                }
+            });
+
             toastsEnter.html(
                 '<button type="button" class="close" aria-label="Close"> \
                     <span aria-hidden="true">&times;</span> \
@@ -36,11 +47,19 @@ export default function() {
                 <span class="message"></span>');
 
             toastsEnter.select('.close')
-                .on('click', function(d) { dispatch[event.notificationClose](d.id); });
+                .on('click', closeNotification);
 
             toasts.select('.message')
                 .text(function(d) { return d.message; });
         });
+    };
+
+    toast.timeout = function(x) {
+        if (!arguments.length) {
+            return timeout;
+        }
+        timeout = x;
+        return toast;
     };
 
     d3.rebind(toast, dispatch, 'on');
