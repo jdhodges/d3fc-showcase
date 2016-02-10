@@ -21,6 +21,12 @@ export default function() {
     var dataProductDropdown = dropdown()
         .on('optionChange', dispatch[event.dataProductChange]);
 
+    var secondariesDataJoin = fc.util.dataJoin()
+        .selector('.overlay-secondary-container')
+        .element('div')
+        .attr('class', 'overlay-secondary-container')
+        .key(function(d) { return d.displayString;});
+
     var overlay = function(selection) {
         selection.each(function(model) {
             var container = d3.select(this);
@@ -39,16 +45,17 @@ export default function() {
                 .datum({selectedIndicators: model.primaryIndicators})
                 .call(primaryChartIndicatorToggle);
 
-            container.selectAll('.overlay-secondary-container')
-                .each(function(d, i) {
-                    var currentSelection = d3.select(this);
+            var secondariesContainer = container.select('#overlay-secondaries-container');
 
-                    var selectedIndicators = model.secondaryIndicators[i] ? [model.secondaryIndicators[i]] : [];
+            var secondaries = secondariesDataJoin(secondariesContainer, model.secondaryIndicators);
 
-                    currentSelection.select('.edit-indicator-container')
-                        .datum({selectedIndicators: selectedIndicators})
-                        .call(secondaryChartToggle);
-                });
+            var editIndicatorContainer = secondaries.enter()
+                .append('div')
+                .attr('class', 'edit-indicator-container');
+
+            editIndicatorContainer.each(function(d) {
+                d3.select(this).datum({selectedIndicators: [d]}).call(secondaryChartToggle);
+            });
         });
     };
 

@@ -12,7 +12,9 @@ export default function() {
         .children(true)
         .selector('.secondary-container')
         .element('svg')
-        .attr('class', 'secondary-container')
+        .attr('class', function(d) {
+            return 'secondary-container secondary-' + d.name;
+        })
         .key(function(d) {
             // Issue with elements being regenerated due to data being overwritten. See:
             // https://github.com/ScottLogic/d3fc/blob/0327890d48c9de73a41d901df02bac88dc83e398/src/series/multi.js#L26-L36

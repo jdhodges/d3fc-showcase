@@ -163,6 +163,16 @@ export default function() {
         };
     }
 
+    function initCharts() {
+        var legend = model.chart.legend(products.generated, periods.day1);
+        var nav = model.chart.nav(products.generated.source.discontinuityProvider);
+        var primary = model.chart.primary(products.generated, products.generated.source.discontinuityProvider);
+        var secondary = model.chart.secondary(products.generated, products.generated.source.discontinuityProvider);
+        var xAxis = model.chart.xAxis(periods.day1, products.generated.source.discontinuityProvider);
+
+        return model.chart.charts(legend, nav, primary, secondary, xAxis);
+    }
+
     var periods = initPeriods();
     var sources = initSources();
     var products = initProducts();
@@ -171,15 +181,11 @@ export default function() {
         data: [],
         periods: periods,
         sources: sources,
-        primaryChart: model.chart.primary(products.generated, products.generated.source.discontinuityProvider),
-        secondaryChart: model.chart.secondary(products.generated, products.generated.source.discontinuityProvider),
         selectors: initSelectors(),
-        xAxis: model.chart.xAxis(periods.day1, products.generated.source.discontinuityProvider),
-        nav: model.chart.nav(products.generated.source.discontinuityProvider),
         navReset: model.chart.navigationReset(),
         headMenu: model.menu.head([products.generated, products.quandl], products.generated, periods.day1),
-        legend: model.chart.legend(products.generated, periods.day1),
         overlay: model.menu.overlay([products.generated, products.quandl], products.generated),
-        notificationMessages: model.notification.messages()
+        notificationMessages: model.notification.messages(),
+        charts: initCharts()
     };
 }

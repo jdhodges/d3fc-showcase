@@ -36,7 +36,11 @@
     }
   }
 
-  &.secondary-macd {
+  .secondary-rsi .rsi {
+    stroke: @rsi-line-colour;
+  }
+
+  .secondary-macd {
     .macd-divergence {
       .bar {
         stroke: @primary-blue;
@@ -64,7 +68,7 @@
     }
   }
 
-  &.secondary-volume {
+  .secondary-volume {
     .bar {
       stroke: @primary-blue;
       fill: @secondary-grey;
