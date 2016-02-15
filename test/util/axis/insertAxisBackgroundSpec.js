@@ -52,7 +52,7 @@ describe('util/axis/insertAxisBackground', function() {
         var isMobileWidth = true;
 
         // Using regular expression as IE translate does not place a comma between the X and Y values
-        var regExp = /translate\(-65(,|) 1\)/;
+        var regExp = /translate\(-60(,|) 1\)/;
 
         insertAxisBackground(testSvg, isMobileWidth);
 
