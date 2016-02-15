@@ -76,17 +76,12 @@ export default function() {
 
     var _dataInterface = initialiseDataInterface();
     var charts = initialiseCharts();
+    var _menu;
 
     var externalHistoricFeedErrorCallback;
-
-    var overlay;
-    var headMenu;
-    var navReset;
-    var selectors;
     var toastNotifications;
 
     var fetchCoinbaseProducts = false;
-
     var proportionOfDataToDisplayByDefault = 0.2;
 
     var firstRender = true;
@@ -101,24 +96,12 @@ export default function() {
         containers.chartsAndOverlay.datum(model.charts)
             .call(charts);
 
-        containers.app.select('#navbar-reset')
-            .datum(model.navReset)
-            .call(navReset);
-
-        containers.app.select('.head-menu')
-            .datum(model.headMenu)
-            .call(headMenu);
-
-        containers.app.selectAll('.selectors')
-            .datum(model.selectors)
-            .call(selectors);
+        containers.app.datum(model.menu)
+            .call(_menu);
 
         containers.app.select('#notifications')
             .datum(model.notificationMessages)
             .call(toastNotifications);
-
-        containers.overlay.datum(model.overlay)
-            .call(overlay);
 
         if (layoutRedrawnInNextRender) {
             containers.suspendLayout(true);
@@ -163,7 +146,7 @@ export default function() {
         model.charts.primary.trackingLatest = trackingLatest;
         model.charts.secondary.trackingLatest = trackingLatest;
         model.charts.trackingLatest = trackingLatest;
-        model.navReset.trackingLatest = trackingLatest;
+        model.menu.navReset.trackingLatest = trackingLatest;
         render();
     }
 
@@ -242,8 +225,8 @@ export default function() {
     }
 
     function updateModelSelectedProduct(product) {
-        model.headMenu.selectedProduct = product;
-        model.overlay.selectedProduct = product;
+        model.menu.head.selectedProduct = product;
+        model.menu.overlay.selectedProduct = product;
         model.charts.primary.product = product;
         model.charts.secondary.product = product;
         model.charts.legend.product = product;
@@ -252,7 +235,7 @@ export default function() {
     }
 
     function updateModelSelectedPeriod(period) {
-        model.headMenu.selectedPeriod = period;
+        model.menu.head.selectedPeriod = period;
         model.charts.xAxis.period = period;
         model.charts.legend.period = period;
     }
@@ -268,11 +251,6 @@ export default function() {
         return chartGroup()
             .on(event.crosshairChange, onCrosshairChange)
             .on(event.viewChange, onViewChange);
-    }
-
-    function initialiseNavReset() {
-        return menu.navigationReset()
-            .on(event.resetToLatest, resetToLatest);
     }
 
     function initialiseDataInterface() {
@@ -317,12 +295,11 @@ export default function() {
                 }
                 render();
             })
-            .on(event.streamingFeedError, onStreamingFeedCloseOrError)
             .on(event.streamingFeedClose, onStreamingFeedCloseOrError);
     }
 
-    function initialiseHeadMenu() {
-        return menu.head()
+    function initialiseMenu() {
+        return menu()
             .on(event.dataProductChange, function(product) {
                 changeProduct(product.option);
                 render();
@@ -340,7 +317,15 @@ export default function() {
                 updatePrimaryChartIndicators();
                 updateSecondaryCharts();
                 render();
-            });
+            })
+            .on(event.primaryChartSeriesChange, function(series) {
+                model.charts.primary.series = series;
+                selectOption(series, model.menu.selectors.seriesSelector.options);
+                render();
+            })
+            .on(event.primaryChartIndicatorChange, onPrimaryIndicatorChange)
+            .on(event.secondaryChartChange, onSecondaryChartChange)
+            .on(event.resetToLatest, resetToLatest);
     }
 
     function selectOption(option, options) {
@@ -352,29 +337,18 @@ export default function() {
 
     function deselectOption(option) { option.isSelected = false; }
 
-    function initialiseSelectors() {
-        return menu.selectors()
-            .on(event.primaryChartSeriesChange, function(series) {
-                model.charts.primary.series = series;
-                selectOption(series, model.selectors.seriesSelector.options);
-                render();
-            })
-            .on(event.primaryChartIndicatorChange, onPrimaryIndicatorChange)
-            .on(event.secondaryChartChange, onSecondaryChartChange);
-    }
-
     function updatePrimaryChartIndicators() {
         model.charts.primary.indicators =
-            model.selectors.indicatorSelector.options.filter(function(option) {
+            model.menu.selectors.indicatorSelector.options.filter(function(option) {
                 return option.isSelected && option.isPrimary;
             });
 
-        model.overlay.primaryIndicators = model.charts.primary.indicators;
-        model.headMenu.primaryIndicators = model.charts.primary.indicators;
+        model.menu.overlay.primaryIndicators = model.charts.primary.indicators;
+        model.menu.head.primaryIndicators = model.charts.primary.indicators;
     }
 
     function updateSecondaryChartModels() {
-        model.charts.secondary.indicators = model.selectors.indicatorSelector.options.filter(function(option) {
+        model.charts.secondary.indicators = model.menu.selectors.indicatorSelector.options.filter(function(option) {
             return option.isSelected && !option.isPrimary;
         });
 
@@ -382,23 +356,13 @@ export default function() {
             return indicator;
         }));
 
-        model.overlay.secondaryIndicators = model.charts.secondary.indicators;
-        model.headMenu.secondaryIndicators = model.charts.secondary.indicators;
+        model.menu.overlay.secondaryIndicators = model.charts.secondary.indicators;
+        model.menu.head.secondaryIndicators = model.charts.secondary.indicators;
     }
 
     function updateSecondaryCharts() {
         updateSecondaryChartModels();
         updateLayout();
-    }
-
-    function initialiseOverlay() {
-        return menu.overlay()
-            .on(event.primaryChartIndicatorChange, onPrimaryIndicatorChange)
-            .on(event.secondaryChartChange, onSecondaryChartChange)
-            .on(event.dataProductChange, function(product) {
-                changeProduct(product.option);
-                render();
-            });
     }
 
     function onNotificationClose(id) {
@@ -421,8 +385,8 @@ export default function() {
             var productPeriodOverrides = d3.map();
             productPeriodOverrides.set('BTC-USD', [model.periods.minute1, model.periods.minute5, model.periods.hour1, model.periods.day1]);
             var formattedProducts = formatCoinbaseProducts(bitcoinProducts, model.sources.bitcoin, defaultPeriods, productPeriodOverrides);
-            model.headMenu.products = model.headMenu.products.concat(formattedProducts);
-            model.overlay.products = model.headMenu.products;
+            model.menu.head.products = model.menu.overlay.products = model.menu.head.products.concat(formattedProducts);
+            model.menu.overlay.products = model.menu.head.products;
         }
 
         render();
@@ -438,15 +402,15 @@ export default function() {
 
     app.changeQuandlProduct = function(productString) {
         var product = dataModel.product(productString, productString, [model.periods.day1], model.sources.quandl, '.3s');
-        var existsInHeadMenuProducts = model.headMenu.products.some(function(p) { return p.id === product.id; });
-        var existsInOverlayProducts = model.overlay.products.some(function(p) { return p.id === product.id; });
+        var existsInHeadMenuProducts = model.menu.head.products.some(function(p) { return p.id === product.id; });
+        var existsInOverlayProducts = model.menu.overlay.products.some(function(p) { return p.id === product.id; });
 
         if (!existsInHeadMenuProducts) {
-            model.headMenu.products.push(product);
+            model.menu.head.products.push(product);
         }
 
         if (!existsInOverlayProducts) {
-            model.overlay.products.push(product);
+            model.menu.overlay.products.push(product);
         }
 
         changeProduct(product);
@@ -508,7 +472,6 @@ export default function() {
 
         var chartsAndOverlayContainer = appContainer.select('#charts');
         var chartsContainer = appContainer.select('#charts-container');
-        var overlayContainer = appContainer.select('#overlay');
         containers = {
             app: appContainer,
             charts: chartsContainer,
@@ -517,8 +480,8 @@ export default function() {
             secondaries: chartsContainer.select('#secondaries-container'),
             xAxis: chartsContainer.select('#x-axis-container'),
             navbar: chartsContainer.select('#navbar-container'),
-            overlay: overlayContainer,
-            overlaySecondaries: overlayContainer.select('#overlay-secondaries-container'),
+            overlay: chartsAndOverlayContainer.select('#overlay'),
+            overlaySecondaries: chartsAndOverlayContainer.select('#overlay-secondaries-container'),
             legend: appContainer.select('#legend'),
             suspendLayout: function(value) {
                 var self = this;
@@ -530,15 +493,13 @@ export default function() {
             }
         };
 
-        headMenu = initialiseHeadMenu();
-        navReset = initialiseNavReset();
-        selectors = initialiseSelectors();
-        overlay = initialiseOverlay();
         toastNotifications = initialiseNotifications();
+        _menu = initialiseMenu();
+        _dataInterface = initialiseDataInterface();
 
         updateLayout();
         initialiseResize();
-        _dataInterface(model.headMenu.selectedPeriod.seconds, model.headMenu.selectedProduct);
+        _dataInterface(model.menu.head.selectedPeriod.seconds, model.menu.head.selectedProduct);
 
         if (fetchCoinbaseProducts) {
             getCoinbaseProducts(addCoinbaseProducts);

@@ -172,6 +172,15 @@ export default function() {
         return model.chart.group(legend, nav, primary, secondary, xAxis);
     }
 
+    function initialiseMenu() {
+        var head = model.menu.head([products.generated, products.quandl], products.generated, periods.day1);
+        var overlay = model.menu.overlay([products.generated, products.quandl], products.generated);
+        var navReset = model.chart.navigationReset();
+        var selectors = initialiseSelectors();
+
+        return model.menu.menu(head, overlay, navReset, selectors);
+    }
+
     var periods = initialisePeriods();
     var sources = initialiseSources();
     var products = initialiseProducts();
@@ -180,11 +189,8 @@ export default function() {
         data: [],
         periods: periods,
         sources: sources,
-        selectors: initialiseSelectors(),
-        navReset: model.chart.navigationReset(),
-        headMenu: model.menu.head([products.generated, products.quandl], products.generated, periods.day1),
-        overlay: model.menu.overlay([products.generated, products.quandl], products.generated),
         notificationMessages: model.notification.messages(),
-        charts: initialiseCharts()
+        charts: initialiseCharts(),
+        menu: initialiseMenu()
     };
 }

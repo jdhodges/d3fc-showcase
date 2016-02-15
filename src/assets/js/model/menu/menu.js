@@ -1,3 +1,4 @@
+import menu from './menus';
 import head from './head';
 import periodAdaptor from './periodAdaptor';
 import productAdaptor from './productAdaptor';
@@ -7,6 +8,7 @@ import option from './option';
 import selector from './selector';
 
 export default {
+    menu: menu,
     head: head,
     periodAdaptor: periodAdaptor,
     productAdaptor: productAdaptor,
