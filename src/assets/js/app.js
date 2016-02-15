@@ -135,8 +135,14 @@ export default function() {
         util.layout(containers, charts);
     }
 
+    function isMobileWidth() {
+        var mobileWidthThreshold = 992;
+        return window.innerWidth < mobileWidthThreshold;
+    }
+
     function initialiseResize() {
         d3.select(window).on('resize', function() {
+            insertIsMobileWidthIntoModel(isMobileWidth());
             updateLayout();
             render();
         });
@@ -265,6 +271,7 @@ export default function() {
     }
 
     function initialiseCharts() {
+        insertIsMobileWidthIntoModel(isMobileWidth());
         return chartGroup()
             .on(event.crosshairChange, onCrosshairChange)
             .on(event.viewChange, onViewChange);
@@ -351,6 +358,11 @@ export default function() {
     }
 
     function deselectOption(option) { option.isSelected = false; }
+
+    function insertIsMobileWidthIntoModel(_isMobileWidth) {
+        model.charts.primary.isMobileWidth = _isMobileWidth;
+        model.charts.secondary.isMobileWidth = _isMobileWidth;
+    }
 
     function initialiseSelectors() {
         return menu.selectors()

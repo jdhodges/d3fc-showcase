@@ -48,4 +48,13 @@
   .domain {
     stroke: @gridline-colour;
   }
+  .closeLine text{
+    dominant-baseline: central;
+  }
+  .axis-background {
+    width: (@y-axis-background-width - 4);
+    height: 100%;
+    fill: fadeout(@y-axis-background-colour, 50%);
+    stroke: none;
+  }
 }

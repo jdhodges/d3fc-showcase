@@ -9,7 +9,8 @@ export default function(initialProduct, initialDiscontinuityProvider) {
         trackingLatest: true,
         viewDomain: [],
         selectorsChanged: true,
-        discontinuityProvider: initialDiscontinuityProvider
+        discontinuityProvider: initialDiscontinuityProvider,
+        isMobileWidth: false
     };
 
     var _product = initialProduct;

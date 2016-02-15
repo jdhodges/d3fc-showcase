@@ -28,7 +28,12 @@ export default function() {
             chart.yTickFormat(model.product.volumeFormat)
                 .trackingLatest(model.trackingLatest)
                 .xDomain(model.viewDomain)
-                .yDomain(paddedYExtent);
+                .yDomain(paddedYExtent)
+                .yDecorate(function(s) {
+                    util.axis.insertAxisBackground(s, model.isMobileWidth);
+                });
+
+            util.axis.repositionAxis(chart, model.viewDomain[1], model.isMobileWidth);
 
             selection.call(chart);
         });

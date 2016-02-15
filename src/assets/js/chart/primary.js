@@ -52,22 +52,22 @@ export default function() {
 
     var crosshairData = [];
     var crosshair = fc.tool.crosshair()
-      .xLabel('')
-      .yLabel('')
-      .on('trackingmove', function(updatedCrosshairData) {
-          if (updatedCrosshairData.length > 0) {
-              dispatch.crosshairChange(updatedCrosshairData[0].datum);
-          } else {
-              dispatch.crosshairChange(undefined);
-          }
-      })
-      .on('trackingend', function() {
-          dispatch.crosshairChange(undefined);
-      });
+        .xLabel('')
+        .yLabel('')
+        .on('trackingmove', function(updatedCrosshairData) {
+            if (updatedCrosshairData.length > 0) {
+                dispatch.crosshairChange(updatedCrosshairData[0].datum);
+            } else {
+                dispatch.crosshairChange(undefined);
+            }
+        })
+        .on('trackingend', function() {
+            dispatch.crosshairChange(undefined);
+        });
     crosshair.id = util.uid();
 
     var gridlines = fc.annotation.gridline()
-      .xTicks(0);
+        .xTicks(0);
     var closeLine = fc.annotation.line()
       .orient('horizontal')
       .value(currentYValueAccessor)
@@ -94,14 +94,15 @@ export default function() {
     var yScale = d3.scale.linear();
 
     var primaryChart = fc.chart.cartesian(xScale, yScale)
-      .xTicks(0)
-      .yOrient('right')
-      .margin({
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: yAxisWidth
-      });
+        .xTicks(0)
+        .yOrient('right')
+        .margin({
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: yAxisWidth
+        })
+        .decorate(util.axis.reorderAxis);
 
     // Create and apply the Moving Average
     var movingAverage = fc.indicator.algorithm.movingAverage();
@@ -146,7 +147,7 @@ export default function() {
             selection.classed('band', true);
 
             selection.selectAll('.vertical > line')
-              .style('stroke-width', width);
+                .style('stroke-width', width);
         });
     }
 
@@ -191,21 +192,31 @@ export default function() {
 
         // Find current tick values and add close price to this list, then set it explicitly below
         var latestPrice = currentYValueAccessor(model.data[model.data.length - 1]);
-        var tickValuesWithAnnotations = produceAnnotatedTickValues(yScale, [latestPrice]);
-        primaryChart.yTickValues(tickValuesWithAnnotations)
-          .yDecorate(function(s) {
-              var closePriceTick = s.selectAll('.tick')
-                .filter(function(d) { return d === latestPrice; })
-                .classed('close-line', true);
+        var tickValues = produceAnnotatedTickValues(yScale, [latestPrice]);
+        primaryChart.yTickValues(tickValues)
+            .yDecorate(function(s) {
+                var closePriceTick = s.selectAll('.tick')
+                    .filter(function(d) {
+                        return d === latestPrice;
+                    })
+                    .classed('close-line', true);
 
-              var calloutHeight = 18;
-              closePriceTick.select('path')
-                .attr('d', function(d) {
-                    return d3.svg.area()(calculateCloseAxisTagPath(yAxisWidth, calloutHeight));
-                });
-              closePriceTick.select('text')
-                .attr('transform', 'translate(' + calloutHeight / 2 + ',1)');
-          });
+                var calloutHeight = 18;
+                var closeTickTranslate = -yAxisWidth;
+
+                closePriceTick.select('path')
+                    .attr('d', function(d) {
+                        return d3.svg.area()(calculateCloseAxisTagPath(yAxisWidth, calloutHeight));
+                    })
+                    .attr('transform', 'translate(' + (model.isMobileWidth ? closeTickTranslate : 0) + ')');
+
+                closePriceTick.select('text')
+                    .attr('transform', 'translate(' + (calloutHeight / 2 * (model.isMobileWidth ? -0.7 : 1) + ', 1)'));
+
+                util.axis.insertAxisBackground(s, model.isMobileWidth);
+            });
+
+        util.axis.repositionAxis(primaryChart, model.viewDomain[1], model.isMobileWidth);
 
         var tickValuesWithoutAnnotations = yScale.ticks.apply(yScale, []);
         gridlines.yTickValues(tickValuesWithoutAnnotations);
@@ -215,14 +226,14 @@ export default function() {
         selection.call(primaryChart);
 
         var zoom = zoomBehavior(zoomWidth)
-          .scale(xScale)
-          .trackingLatest(model.trackingLatest)
-          .on('zoom', function(domain) {
-              dispatch[event.viewChange](domain);
-          });
+            .scale(xScale)
+            .trackingLatest(model.trackingLatest)
+            .on('zoom', function(domain) {
+                dispatch[event.viewChange](domain);
+            });
 
         selection.select('.plot-area')
-          .call(zoom);
+            .call(zoom);
     }
 
     d3.rebind(primary, dispatch, 'on');

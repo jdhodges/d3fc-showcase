@@ -36,9 +36,15 @@ export default function() {
             .fields('macd')
             .symmetricalAbout(0)
             .pad(0.08)(model.data.map(function(d) { return d.macd; }));
+
         chart.trackingLatest(model.trackingLatest)
             .xDomain(model.viewDomain)
-            .yDomain(paddedYExtent);
+            .yDomain(paddedYExtent)
+            .yDecorate(function(s) {
+                util.axis.insertAxisBackground(s, model.isMobileWidth);
+            });
+
+        util.axis.repositionAxis(chart, model.viewDomain[1], model.isMobileWidth);
 
         selection.call(chart);
     }

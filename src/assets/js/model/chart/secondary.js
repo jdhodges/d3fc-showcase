@@ -6,6 +6,7 @@ export default function(initialProduct, initialDiscontinuityProvider) {
         trackingLatest: true,
         product: initialProduct,
         discontinuityProvider: initialDiscontinuityProvider,
+        isMobileWidth: false,
         indicators: []
     };
 }

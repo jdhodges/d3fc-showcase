@@ -2,6 +2,7 @@ import d3 from 'd3';
 import fc from 'd3fc';
 import event from '../../event';
 import base from './base';
+import util from '../../util/util';
 
 export default function() {
     var dispatch = d3.dispatch(event.viewChange);
@@ -22,7 +23,12 @@ export default function() {
 
         chart.trackingLatest(model.trackingLatest)
             .xDomain(model.viewDomain)
-            .yDomain([0, 100]);
+            .yDomain([0, 100])
+            .yDecorate(function(s) {
+                util.axis.insertAxisBackground(s, model.isMobileWidth);
+            });
+
+        util.axis.repositionAxis(chart, model.viewDomain[1], model.isMobileWidth);
 
         selection.call(chart);
     }
