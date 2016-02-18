@@ -52,29 +52,29 @@ export default function() {
 
     var crosshairData = [];
     var crosshair = fc.tool.crosshair()
-      .xLabel('')
-      .yLabel('')
-      .on('trackingmove', function(updatedCrosshairData) {
-          if (updatedCrosshairData.length > 0) {
-              dispatch.crosshairChange(updatedCrosshairData[0].datum);
-          } else {
-              dispatch.crosshairChange(undefined);
-          }
-      })
-      .on('trackingend', function() {
-          dispatch.crosshairChange(undefined);
-      });
+        .xLabel('')
+        .yLabel('')
+        .on('trackingmove', function(updatedCrosshairData) {
+            if (updatedCrosshairData.length > 0) {
+                dispatch.crosshairChange(updatedCrosshairData[0].datum);
+            } else {
+                dispatch.crosshairChange(undefined);
+            }
+        })
+        .on('trackingend', function() {
+            dispatch.crosshairChange(undefined);
+        });
     crosshair.id = util.uid();
 
     var gridlines = fc.annotation.gridline()
-      .xTicks(0);
+        .xTicks(0);
     var closeLine = fc.annotation.line()
-      .orient('horizontal')
-      .value(currentYValueAccessor)
-      .label('')
-      .decorate(function(g) {
-          g.classed('close-line', true);
-      });
+        .orient('horizontal')
+        .value(currentYValueAccessor)
+        .label('')
+        .decorate(function(g) {
+            g.classed('close-line', true);
+        });
     closeLine.id = util.uid();
 
     var multi = fc.series.multi()
@@ -94,14 +94,14 @@ export default function() {
     var yScale = d3.scale.linear();
 
     var primaryChart = fc.chart.cartesian(xScale, yScale)
-      .xTicks(0)
-      .yOrient('right')
-      .margin({
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: yAxisWidth
-      });
+        .xTicks(0)
+        .yOrient('right')
+        .margin({
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: yAxisWidth
+        });
 
     // Create and apply the Moving Average
     var movingAverage = fc.indicator.algorithm.movingAverage();
@@ -146,7 +146,7 @@ export default function() {
             selection.classed('band hidden-xs hidden-sm', true);
 
             selection.selectAll('.vertical > line')
-              .style('stroke-width', width);
+                .style('stroke-width', width);
         });
     }
 
@@ -192,19 +192,19 @@ export default function() {
         var latestPrice = currentYValueAccessor(model.data[model.data.length - 1]);
         var tickValues = produceAnnotatedTickValues(yScale, [latestPrice]);
         primaryChart.yTickValues(tickValues)
-          .yDecorate(function(s) {
-              var closePriceTick = s.selectAll('.tick')
-                .filter(function(d) { return d === latestPrice; })
-                .classed('close-line', true);
+            .yDecorate(function(s) {
+                var closePriceTick = s.selectAll('.tick')
+                    .filter(function(d) { return d === latestPrice; })
+                    .classed('close-line', true);
 
-              var calloutHeight = 18;
-              closePriceTick.select('path')
-                .attr('d', function(d) {
-                    return d3.svg.area()(calculateCloseAxisTagPath(yAxisWidth, calloutHeight));
-                });
-              closePriceTick.select('text')
-                .attr('transform', 'translate(' + calloutHeight / 2 + ',1)');
-          });
+                var calloutHeight = 18;
+                closePriceTick.select('path')
+                    .attr('d', function(d) {
+                        return d3.svg.area()(calculateCloseAxisTagPath(yAxisWidth, calloutHeight));
+                    });
+                closePriceTick.select('text')
+                    .attr('transform', 'translate(' + calloutHeight / 2 + ',1)');
+            });
 
         gridlines.yTicks(tickValues.length - 1);
 
@@ -213,14 +213,14 @@ export default function() {
         selection.call(primaryChart);
 
         var zoom = zoomBehavior(zoomWidth)
-          .scale(xScale)
-          .trackingLatest(model.trackingLatest)
-          .on('zoom', function(domain) {
-              dispatch[event.viewChange](domain);
-          });
+            .scale(xScale)
+            .trackingLatest(model.trackingLatest)
+            .on('zoom', function(domain) {
+                dispatch[event.viewChange](domain);
+            });
 
         selection.select('.plot-area')
-          .call(zoom);
+            .call(zoom);
     }
 
     d3.rebind(primary, dispatch, 'on');

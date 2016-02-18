@@ -4,8 +4,8 @@ import fc from 'd3fc';
 export default function() {
     var dispatch = d3.dispatch('tabClick');
     var dataJoin = fc.util.dataJoin()
-      .selector('ul')
-      .element('ul');
+        .selector('ul')
+        .element('ul');
 
     function tabGroup(selection) {
         var selectedIndex = selection.datum().selectedIndex || 0;

@@ -42,39 +42,39 @@ export default function(width) {
     function zoom(selection) {
 
         var xExtent = fc.util.extent()
-          .fields('date')(selection.datum().data);
+            .fields('date')(selection.datum().data);
 
         zoomBehavior.x(scale)
-          .on('zoom', function() {
-              var min = scale(xExtent[0]);
-              var max = scale(xExtent[1]);
+            .on('zoom', function() {
+                var min = scale(xExtent[0]);
+                var max = scale(xExtent[1]);
 
-              var maxDomainViewed = controlZoom([min, max - width]);
-              var panningRestriction = controlPan([min, max - width]);
-              translateXZoom(panningRestriction);
+                var maxDomainViewed = controlZoom([min, max - width]);
+                var panningRestriction = controlPan([min, max - width]);
+                translateXZoom(panningRestriction);
 
-              var panned = (zoomBehavior.scale() === 1);
-              var zoomed = (zoomBehavior.scale() !== 1);
+                var panned = (zoomBehavior.scale() === 1);
+                var zoomed = (zoomBehavior.scale() !== 1);
 
-              if ((panned && allowPan) || (zoomed && allowZoom)) {
-                  var domain = scale.domain();
-                  if (maxDomainViewed) {
-                      domain = xExtent;
-                  } else if (zoomed && trackingLatest) {
-                      domain = util.domain.moveToLatest(domain, selection.datum().data);
-                  }
+                if ((panned && allowPan) || (zoomed && allowZoom)) {
+                    var domain = scale.domain();
+                    if (maxDomainViewed) {
+                        domain = xExtent;
+                    } else if (zoomed && trackingLatest) {
+                        domain = util.domain.moveToLatest(domain, selection.datum().data);
+                    }
 
-                  if (domain[0].getTime() !== domain[1].getTime()) {
-                      dispatch.zoom(domain);
-                  } else {
-                      // Ensure the user can't zoom-in infinitely, causing the chart to fail to render
-                      // #168, #411
-                      resetBehaviour();
-                  }
-              } else {
-                  resetBehaviour();
-              }
-          });
+                    if (domain[0].getTime() !== domain[1].getTime()) {
+                        dispatch.zoom(domain);
+                    } else {
+                        // Ensure the user can't zoom-in infinitely, causing the chart to fail to render
+                        // #168, #411
+                        resetBehaviour();
+                    }
+                } else {
+                    resetBehaviour();
+                }
+            });
 
         selection.call(zoomBehavior);
     }

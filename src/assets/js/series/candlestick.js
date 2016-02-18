@@ -12,21 +12,21 @@ export default function() {
     var yCloseValue = function(d, i) { return d.close; };
 
     var candlestickSvg = fc.svg.candlestick()
-      .x(function(d) { return xScale(d.date); })
-      .open(function(d) { return yScale(d.open); })
-      .high(function(d) { return yScale(yHighValue(d)); })
-      .low(function(d) { return yScale(yLowValue(d)); })
-      .close(function(d) { return yScale(d.close); });
+        .x(function(d) { return xScale(d.date); })
+        .open(function(d) { return yScale(d.open); })
+        .high(function(d) { return yScale(yHighValue(d)); })
+        .low(function(d) { return yScale(yLowValue(d)); })
+        .close(function(d) { return yScale(d.close); });
 
     var upDataJoin = fc.util.dataJoin()
-      .selector('path.up')
-      .element('path')
-      .attr('class', 'up');
+        .selector('path.up')
+        .element('path')
+        .attr('class', 'up');
 
     var downDataJoin = fc.util.dataJoin()
-      .selector('path.down')
-      .element('path')
-      .attr('class', 'down');
+        .selector('path.down')
+        .element('path')
+        .attr('class', 'down');
 
     var candlestick = function(selection) {
         selection.each(function(data) {
@@ -36,10 +36,10 @@ export default function() {
             var downData = data.filter(function(d) { return d.open >= d.close; });
 
             upDataJoin(this, [upData])
-              .attr('d', candlestickSvg);
+                .attr('d', candlestickSvg);
 
             downDataJoin(this, [downData])
-              .attr('d', candlestickSvg);
+                .attr('d', candlestickSvg);
         });
     };
 

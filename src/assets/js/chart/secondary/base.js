@@ -12,32 +12,32 @@ export default function() {
 
     var multi = fc.series.multi();
     var chart = fc.chart.cartesian(xScale, yScale)
-      .plotArea(multi)
-      .xTicks(0)
-      .yOrient('right')
-      .margin({
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: yAxisWidth
-      });
+        .plotArea(multi)
+        .xTicks(0)
+        .yOrient('right')
+        .margin({
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: yAxisWidth
+        });
     var zoomWidth;
 
     function secondary(selection) {
         selection.each(function(data) {
             var container = d3.select(this)
-              .call(chart);
+                .call(chart);
 
             var zoom = zoomBehavior(zoomWidth)
-              .scale(xScale)
-              .trackingLatest(trackingLatest)
-              .on('zoom', function(domain) {
-                  dispatch[event.viewChange](domain);
-              });
+                .scale(xScale)
+                .trackingLatest(trackingLatest)
+                .on('zoom', function(domain) {
+                    dispatch[event.viewChange](domain);
+                });
 
             container.select('.plot-area-container')
-              .datum({data: selection.datum()})
-              .call(zoom);
+                .datum({data: selection.datum()})
+                .call(zoom);
         });
     }
 

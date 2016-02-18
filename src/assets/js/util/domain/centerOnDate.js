@@ -3,7 +3,7 @@ import fc from 'd3fc';
 
 export default function(domain, data, centerDate) {
     var dataExtent = fc.util.extent()
-      .fields('date')(data);
+        .fields('date')(data);
     var domainTimes = domain.map(function(d) { return d.getTime(); });
     var domainTimeDifference = (d3.max(domainTimes) - d3.min(domainTimes)) / 1000;
 

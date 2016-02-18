@@ -10,9 +10,9 @@ export default function(domain, data) {
 
     var bisector = d3.bisector(function(d) { return d.date; });
     var filteredData = data.slice(
-      // Pad and clamp the bisector values to ensure extents can be calculated
-      Math.max(0, bisector.left(dataSortedByDate, startDate) - 1),
-      Math.min(bisector.right(dataSortedByDate, endDate) + 1, dataSortedByDate.length)
+        // Pad and clamp the bisector values to ensure extents can be calculated
+        Math.max(0, bisector.left(dataSortedByDate, startDate) - 1),
+        Math.min(bisector.right(dataSortedByDate, endDate) + 1, dataSortedByDate.length)
     );
     return filteredData;
 }

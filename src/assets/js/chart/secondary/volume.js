@@ -7,14 +7,14 @@ import base from './base';
 export default function() {
     var dispatch = d3.dispatch(event.viewChange);
     var volumeBar = fc.series.bar()
-      .yValue(function(d) { return d.volume; });
+        .yValue(function(d) { return d.volume; });
 
     var chart = base()
-      .series([volumeBar])
-      .yTicks(4)
-      .on(event.viewChange, function(domain) {
-          dispatch[event.viewChange](domain);
-      });
+        .series([volumeBar])
+        .yTicks(4)
+        .on(event.viewChange, function(domain) {
+            dispatch[event.viewChange](domain);
+        });
 
     function volume(selection) {
         selection.each(function(model) {

@@ -4,8 +4,8 @@ import fc from 'd3fc';
 export default function() {
     var xScale = fc.scale.dateTime();
     var xAxis = d3.svg.axis()
-      .scale(xScale)
-      .orient('bottom');
+        .scale(xScale)
+        .orient('bottom');
 
     function preventTicksMoreFrequentThanPeriod(period) {
         var scaleTickSeconds = (xScale.ticks()[1] - xScale.ticks()[0]) / 1000;
