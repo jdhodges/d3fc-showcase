@@ -48,6 +48,11 @@
 @btn-primary-color: @brand-primary;
 @btn-primary-bg: @primary-dark-blue;
 @btn-primary-border: @secondary-grey;
+@btn-border-radius-base: 2px;
+@btn-hover-border-colour: @primary-white;
+@btn-hover-background-colour: lighten(@primary-dark-blue, 5%);
+@btn-active-border-colour: darken(@primary-white, 15%);
+@btn-active-background-colour: darken(@primary-dark-blue, 2%);
 
 // Dropdown
 @dropdown-colour: @secondary-grey;
@@ -100,6 +105,9 @@
 @navigator-stroke: 1px;
 @navigator-stroke-colour: @primary-white;
 @navigator-selection-border-colour: @primary-white;
+@navigator-reset-background-colour: fade(@primary-dark-blue, 20%);
+@navigator-reset-active-background-colour: fade(@primary-white, 20%);
+@navigator-reset-stroke-colour: fade(@primary-white, 20%);
 
 // Masks (SVG filters)
 @mask-transparent: @primary-black;
@@ -124,7 +132,10 @@
 @legend-value-font-colour: @primary-blue;
 
 // Head
+@product-selector-font-colour: @primary-white;
 @period-selector-font-colour: @primary-blue;
+@period-selector-selected-background-colour: lighten(@background-colour, 10%);
+@period-selector-selected-border-colour: lighten(@background-colour, 15%);
 @head-height: 48px;
 
 // Secondary Chart
@@ -136,7 +147,6 @@
 @macd-line-colour: @tertiary-green;
 
 // Selectors
-@selector-font-colour: @primary-blue;
 @model-product-dropdown-background-colour: @background-colour;
 
 // Overlay

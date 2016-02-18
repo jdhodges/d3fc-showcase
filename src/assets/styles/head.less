@@ -16,7 +16,12 @@
       flex-grow: 1;
 
       button {
-        border: none !important;
+        color: @product-selector-font-colour;
+      }
+
+      &:not(.open) button:not(:hover):not(:active) {
+          border: 1px solid transparent;
+          background-color: @btn-primary-bg;
       }
     }
 
@@ -39,27 +44,23 @@
       }
       li {
         display: inline-block;
-        border: 1px solid @gridline-colour;
-        border-bottom: 0;
-        margin-left: -1px;
         width: 56px;
         line-height: 15px;
         text-align: center;
+        border-radius: 0;
+        padding: 2px;
       }
 
       li:first-child {
         margin-left: 0;
       }
-      li.active {
-        background-color: fade(@primary-white, 20%);
-      }
-      li.active a {
-        color: @primary-white;
+      li.selected:not(:hover) {
+        background-color: @period-selector-selected-background-colour;
+        border-color: @period-selector-selected-border-colour;
       }
       a {
         color: @period-selector-font-colour;
         text-decoration: none;
-        padding: 3px;
         font-size: @font-size-small;
         font-weight: @font-weight-base;
         line-height: @line-height-base;

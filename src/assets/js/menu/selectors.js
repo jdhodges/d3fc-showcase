@@ -49,7 +49,9 @@ export default function() {
                     options: options,
                     selectedIndexes: selectedIndicatorIndexes
                 })
-                .call(indicatorToggle);
+                .call(indicatorToggle)
+                .select('.dropdown-toggle')
+                .classed('btn btn-primary', true);
 
         });
     };

@@ -12,6 +12,7 @@
 
     .extent {
       fill: @secondary-orange;
+      shape-rendering: crispEdges;
       stroke: none;
     }
 
@@ -84,18 +85,25 @@
   #navbar-reset {
     flex: 0 0 32px;
     height: 40px;
-    opacity: 0.2;
-    margin: 10px 12px 0 15px;
+    margin: 10px 21px 0 15px;
 
     .reset-button {
-      stroke: @primary-white;
-      fill: @primary-dark-blue;
       shape-rendering: auto;
+      stroke: @navigator-reset-stroke-colour;
+      fill: @navigator-reset-background-colour;
       cursor: pointer;
 
       &.active {
-        fill: @primary-white;
+        fill: @navigator-reset-active-background-colour;
       }
+
+      &:hover {
+        stroke: @btn-hover-border-colour;
+      }
+    }
+
+    .reset-button > path {
+      cursor: pointer;
     }
   }
 }

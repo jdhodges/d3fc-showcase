@@ -31,9 +31,8 @@
 
           display: none;
 
-          .dropdown-toggle {
-            background-color: fadeout(@model-product-dropdown-background-colour, 25%);
-            border: none;
+          &:not(.open) button:not(:hover):not(:active) {
+            border: 1px solid transparent;
           }
         }
       }
@@ -93,12 +92,6 @@
     margin-right: 5px;
     padding-left: 5px;
     padding-right: 5px;
-
-    .icon {
-      cursor: pointer;
-      background-color: @overlay-background-colour;
-      border-radius: 4px;
-    }
 
     .indicator-label {
       color: @edit-indicator-text-colour;

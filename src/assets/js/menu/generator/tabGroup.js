@@ -24,7 +24,8 @@ export default function() {
             .attr('href', '#')
             .on('click', dispatch.tabClick);
 
-        li.classed('active', function(d, i) { return i === selectedIndex; })
+        li.attr('class', 'btn btn-primary')
+            .classed('selected', function(d, i) { return i === selectedIndex; })
             .select('a')
             .text(function(option) { return option.displayString; });
 

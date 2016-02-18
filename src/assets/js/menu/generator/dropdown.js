@@ -8,7 +8,7 @@ export default function() {
         .selector('button')
         .element('button')
         .attr({
-            'class': 'dropdown-toggle',
+            'class': 'dropdown-toggle btn btn-primary',
             'type': 'button',
             'data-toggle': 'dropdown'
         });
