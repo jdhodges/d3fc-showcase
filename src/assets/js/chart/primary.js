@@ -86,7 +86,7 @@ export default function() {
             case crosshair:
                 return crosshairData;
             default:
-                return this.data;
+                return this.visibleData;
             }
         });
 
@@ -174,8 +174,8 @@ export default function() {
 
         xScale.discontinuityProvider(model.discontinuityProvider);
 
-        crosshair.snap(fc.util.seriesPointSnapXOnly(currentSeries.option, model.data));
-        updateCrosshairDecorate(model.data);
+        crosshair.snap(fc.util.seriesPointSnapXOnly(currentSeries.option, model.visibleData));
+        updateCrosshairDecorate(model.visibleData);
 
         movingAverage(model.data);
         bollingerAlgorithm(model.data);
@@ -186,7 +186,7 @@ export default function() {
         var extentAccessors = getExtentAccessors(multi.series());
         var paddedYExtent = fc.util.extent()
             .fields(extentAccessors)
-            .pad(0.08)(visibleData);
+            .pad(0.08)(model.visibleData);
         primaryChart.yDomain(paddedYExtent);
 
         // Find current tick values and add close price to this list, then set it explicitly below

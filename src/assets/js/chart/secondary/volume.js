@@ -11,11 +11,11 @@ export default function() {
       .yValue(function(d) { return d.volume; });
 
     var chart = base()
-      .series([volumeBar])
-      .yTicks(4)
-      .on(event.viewChange, function(domain) {
-          dispatch[event.viewChange](domain);
-      });
+        .series([volumeBar])
+        .yTicks(4)
+        .on(event.viewChange, function(domain) {
+            dispatch[event.viewChange](domain);
+        });
 
     function volume(selection) {
         selection.each(function(model) {
@@ -30,8 +30,7 @@ export default function() {
                 .xDomain(model.viewDomain)
                 .yDomain(paddedYExtent);
 
-            selection.datum(model)
-                .call(chart);
+            selection.call(chart);
         });
     }
 

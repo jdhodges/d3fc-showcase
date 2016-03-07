@@ -10,22 +10,21 @@ export default function() {
     var tickValues = [renderer.lowerValue(), 50, renderer.upperValue()];
 
     var chart = base()
-      .series([renderer])
-      .yTickValues(tickValues)
-      .on(event.viewChange, function(domain) {
-          dispatch[event.viewChange](domain);
-      });
+        .series([renderer])
+        .yTickValues(tickValues)
+        .on(event.viewChange, function(domain) {
+            dispatch[event.viewChange](domain);
+        });
 
     function rsi(selection) {
         var model = selection.datum();
         algorithm(model.data);
 
         chart.trackingLatest(model.trackingLatest)
-          .xDomain(model.viewDomain)
-          .yDomain([0, 100]);
+            .xDomain(model.viewDomain)
+            .yDomain([0, 100]);
 
-        selection.datum(model)
-          .call(chart);
+        selection.call(chart);
     }
 
     d3.rebind(rsi, dispatch, 'on');

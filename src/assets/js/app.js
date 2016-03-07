@@ -189,6 +189,10 @@ export default function() {
         model.xAxis.viewDomain = viewDomain;
         model.nav.viewDomain = viewDomain;
 
+        var visibleData = util.domain.filterDataInDateRange(viewDomain, model.data);
+        model.primaryChart.visibleData = visibleData;
+        model.secondaryChart.visibleData = visibleData;
+
         var trackingLatest = util.domain.trackingLatestData(
             model.primaryChart.viewDomain,
             model.primaryChart.data);
@@ -258,6 +262,7 @@ export default function() {
     }
 
     function updateModelData(data) {
+        model.data = data;
         model.primaryChart.data = data;
         model.secondaryChart.data = data;
         model.nav.data = data;
