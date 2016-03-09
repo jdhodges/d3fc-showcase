@@ -107,6 +107,7 @@ export default function() {
     var proportionOfDataToDisplayByDefault = 0.2;
 
     var firstRender = true;
+    var appInitialised = false;
     function renderInternal() {
         if (firstRender) {
             firstRender = false;
@@ -527,7 +528,7 @@ export default function() {
         });
 
         updatePrimaryChartIndicators();
-        if (!firstRender) {
+        if (appInitialised) {
             updateSecondaryCharts();
             render();
         } else {
@@ -587,6 +588,8 @@ export default function() {
         } else if (model.sources.bitcoin) {
             delete model.sources.bitcoin;
         }
+
+        appInitialised = true;
     };
 
     fc.util.rebind(app, model.sources.quandl.historicFeed, {
