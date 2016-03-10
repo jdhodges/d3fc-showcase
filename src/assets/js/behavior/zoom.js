@@ -87,7 +87,8 @@ export default function(width) {
               }
           });
 
-        selection.call(zoomBehavior);
+        selection.call(zoomBehavior)
+            .on('dblclick.zoom', null);
     }
 
     zoom.allowPan = function(x) {
