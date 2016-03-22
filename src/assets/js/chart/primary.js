@@ -140,15 +140,10 @@ export default function() {
     }
 
     function bandCrosshair(model) {
+        var xValue = currentSeries.option.xValue();
         var mapFunction = function(d, i) { return xScale(xValue(d, i)); };
         var barWidth = currentSeries.option.barWidth();
-        var xValue = currentSeries.option.xValue();
-        var yValue = function(d) { return d.volume; };
-        var y0Value = d3.functor(0);
-        var x0Value = d3.functor(0);
-
-        var filteredData = model.data.filter(fc.util.fn.defined(x0Value, y0Value, xValue, yValue));
-        var width = barWidth(filteredData.map(mapFunction));
+        var width = barWidth(model.data.map(mapFunction));
 
         crosshair.decorate(function(selection) {
             selection.classed('band', true);
