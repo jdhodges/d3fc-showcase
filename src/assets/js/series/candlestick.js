@@ -85,6 +85,13 @@ export default function() {
         yCloseValue = x;
         return candlestick;
     };
+    candlestick.barWidth = function(x) {
+        if (!arguments.length) {
+            return barWidth;
+        }
+        barWidth = d3.functor(x);
+        return candlestick;
+    };
     candlestick.width = function(data) {
         return barWidth(data.map(xValueScaled));
     };

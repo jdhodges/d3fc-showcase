@@ -139,8 +139,16 @@ export default function() {
         model.selectorsChanged = false;
     }
 
-    function bandCrosshair(data) {
-        var width = currentSeries.option.width(data);
+    function bandCrosshair(model) {
+        var mapFunction = function(d, i) { return xScale(xValue(d, i)); };
+        var barWidth = currentSeries.option.barWidth();
+        var xValue = currentSeries.option.xValue();
+        var yValue = function(d) { return d.volume; };
+        var y0Value = d3.functor(0);
+        var x0Value = d3.functor(0);
+
+        var filteredData = model.data.filter(fc.util.fn.defined(x0Value, y0Value, xValue, yValue));
+        var width = barWidth(filteredData.map(mapFunction));
 
         crosshair.decorate(function(selection) {
             selection.classed('band', true);
@@ -155,9 +163,9 @@ export default function() {
             .selectAll('line')
             .style('stroke-width', null);
     }
-    function updateCrosshairDecorate(data) {
+    function updateCrosshairDecorate(model) {
         if (currentSeries.valueString === 'candlestick' || currentSeries.valueString === 'ohlc') {
-            bandCrosshair(data);
+            bandCrosshair(model);
         } else {
             crosshair.decorate(lineCrosshair);
         }
@@ -174,8 +182,9 @@ export default function() {
 
         xScale.discontinuityProvider(model.discontinuityProvider);
 
+        crosshair.xScale(xScale);
         crosshair.snap(fc.util.seriesPointSnapXOnly(currentSeries.option, model.data));
-        updateCrosshairDecorate(model.data);
+        updateCrosshairDecorate(model);
 
         movingAverage(model.data);
         bollingerAlgorithm(model.data);
