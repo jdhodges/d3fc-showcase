@@ -162,12 +162,13 @@ export default function() {
         }
     }
 
-    function renderLegend() {
+    function renderLegendInternal() {
         containers.legend.datum(model.legend)
             .call(charts.legend);
     }
 
     var render = fc.util.render(renderInternal);
+    var renderLegend = fc.util.render(renderLegendInternal);
 
     var layoutRedrawnInNextRender = true;
 
@@ -217,8 +218,10 @@ export default function() {
     }
 
     function onCrosshairChange(dataPoint) {
-        model.legend.data = dataPoint;
-        renderLegend();
+        if (dataPoint !== model.legend.data) {
+            model.legend.data = dataPoint;
+            renderLegend();
+        }
     }
 
     function onStreamingFeedCloseOrError(streamingEvent, source) {
