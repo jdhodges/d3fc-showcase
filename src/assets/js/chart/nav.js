@@ -22,6 +22,7 @@ export default function() {
     var dispatch = d3.dispatch(event.viewChange);
     var xScale = fc.scale.dateTime();
     var yScale = d3.scale.linear();
+    var noDiscontinuityScale = fc.scale.dateTime();
 
     var navChart = fc.chart.cartesian(xScale, yScale)
         .yTicks(0)
@@ -145,6 +146,9 @@ export default function() {
     function nav(selection) {
         var model = selection.datum();
 
+        noDiscontinuityScale.domain(fc.util.extent().fields('date')(model.data));
+        var xTicks = noDiscontinuityScale.ticks();
+
         sampler.bucketSize(Math.max(model.data.length / numberOfSamples, 1));
         var sampledData = sampler(model.data);
 
@@ -163,6 +167,10 @@ export default function() {
 
         navChart.xDomain(fc.util.extent().fields('date')(sampledData))
             .yDomain(yExtent);
+
+        navChart.xDomain(fc.util.extent().fields('date')(model.data))
+            .yDomain(yExtent)
+            .xTickValues(xTicks);
 
         brush.on('brush', function() {
             var brushExtentIsEmpty = xEmpty(brush);
