@@ -14,6 +14,12 @@ import initialiseModel from './initialiseModel';
 import getCoinbaseProducts from './data/coinbase/getProducts';
 import formatCoinbaseProducts from './data/coinbase/formatProducts';
 
+d3.selection.prototype.callIfVisible = function(callback) {
+    if (util.isVisible(this)) {
+        this.call(callback);
+    }
+};
+
 export default function() {
 
     var appTemplate = '<div class="container-fluid"> \
@@ -103,7 +109,7 @@ export default function() {
 
         containers.app.select('#navbar-reset')
             .datum(model.navReset)
-            .call(navReset);
+            .callIfVisible(navReset);
 
         containers.app.select('.head-menu')
             .datum(model.headMenu)

@@ -31,7 +31,7 @@ export default function() {
 
             selection.select('#navbar-container')
                 .datum(model.nav)
-                .call(nav);
+                .callIfVisible(nav);
 
             selection.select('#primary-container')
                 .datum(model.primary)
