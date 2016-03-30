@@ -13,9 +13,8 @@ export default function(width) {
     var allowZoom = true;
     var trackingLatest = true;
 
-    function controlZoom(zoomExtent) {
-        // If zooming, and about to pan off screen, do nothing
-        return (zoomExtent[0] > 0 && zoomExtent[1] < 0);
+    function isMaxDomainViewed(zoomExtent) {
+        return (zoomExtent[0] === 0 && zoomExtent[1] === 0);
     }
 
     function resetBehaviour() {
@@ -54,19 +53,18 @@ export default function(width) {
               var t = d3.event.translate,
                   tx = t[0];
 
-              var maxDomainViewed = controlZoom(zoomPixelExtent);
+              var maxDomainViewed = isMaxDomainViewed(zoomPixelExtent);
 
               tx = clamp(tx, -zoomPixelExtent[1], -zoomPixelExtent[0]);
               zoomBehavior.translate([tx, 0]);
 
               var panned = (zoomBehavior.scale() === 1);
               var zoomed = (zoomBehavior.scale() !== 1);
+              var zoomedOut = (zoomBehavior.scale() < 1);
 
-              if ((panned && allowPan) || (zoomed && allowZoom)) {
+              if ((panned && allowPan) || (zoomed && allowZoom) && !(zoomedOut && maxDomainViewed)) {
                   var domain = scale.domain();
-                  if (maxDomainViewed) {
-                      domain = xExtent;
-                  } else if (zoomed && trackingLatest) {
+                  if (zoomed && trackingLatest) {
                       domain = util.domain.moveToLatest(
                           selection.datum().discontinuityProvider,
                           domain,
