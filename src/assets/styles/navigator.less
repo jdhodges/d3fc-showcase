@@ -13,6 +13,7 @@
     .extent {
       fill: @secondary-orange;
       stroke: none;
+      shape-rendering: crispEdges;
     }
 
     .background {
@@ -43,12 +44,10 @@
         .outer-handle {
           stroke: @primary-white;
           fill: @primary-dark-blue;
-          shape-rendering: auto;
         }
         .inner-handle {
           stroke: @primary-white;
           fill: @primary-white;
-          shape-rendering: auto;
         }
       }
     }
@@ -82,23 +81,20 @@
   }
 
   #navbar-reset {
-    flex: 0 0 24px;
+    flex: 0 0 32px;
     height: 40px;
     opacity: 0.2;
-    margin: 10px 21px 0 15px;
+    margin: 10px 12px 0 15px;
 
     .reset-button {
       stroke: @primary-white;
       fill: @primary-dark-blue;
       shape-rendering: auto;
+      cursor: pointer;
 
       &.active {
         fill: @primary-white;
       }
-    }
-
-    .reset-button > path {
-      cursor: pointer;
     }
   }
 }
