@@ -58,7 +58,7 @@ export default function() {
                 .attr('height', barHeight)
                 .attr('y', borderWidth);
             enter.select('.extent')
-                .attr('fill', 'url("#brush-gradient")');
+                .attr('mask', 'url("#brush-mask")');
 
             // Adds the handles to the brush sides
             var handles = enter.selectAll('.e, .w');
