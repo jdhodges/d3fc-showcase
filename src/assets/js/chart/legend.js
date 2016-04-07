@@ -15,7 +15,12 @@ export default function() {
             ['L', function(d) { return priceFormat(d.low); }],
             ['C', function(d) { return priceFormat(d.close); }],
             ['V', function(d) { return volumeFormat(d.volume); }]
-        ]);
+        ])
+        .decorate(function(selection) {
+            selection.enter()
+                .selectAll('text')
+                .attr('dy', textYOffset);
+        });
 
     function legend(selection) {
         selection.each(function(model) {
@@ -34,11 +39,7 @@ export default function() {
 
             if (model.data) {
                 tooltipContainer.datum(model.data)
-                    .call(tooltip)
-                    .selectAll('text')
-                    .each(function() {
-                        this.setAttribute('dy', textYOffset);
-                    });
+                    .call(tooltip);
             }
         });
     }

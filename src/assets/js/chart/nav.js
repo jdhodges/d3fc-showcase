@@ -30,9 +30,9 @@ export default function() {
             bottom: bottomMargin      // Variable also in navigator.less - should be used once ported to flex
         })
         .decorate(function(selection) {
-            selection.enter().selectAll('.x-axis text').each(function() {
-                this.setAttribute('dy', xAxisTextYOffset);
-            });
+            selection.enter()
+                .selectAll('.x-axis text')
+                .attr('dy', xAxisTextYOffset);
         });
 
     var viewScale = fc.scale.dateTime();

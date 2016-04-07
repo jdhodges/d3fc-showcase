@@ -204,9 +204,7 @@ export default function() {
               closePriceTick.select('text')
                 .attr('transform', 'translate(' + calloutHeight / 2 + ',1)');
 
-              s.selectAll('text').each(function() {
-                  this.setAttribute('dy', yAxisTextYOffset);
-              });
+              s.selectAll('text').attr('dy', yAxisTextYOffset);
           });
 
         var tickValuesWithoutAnnotations = yScale.ticks.apply(yScale, []);
