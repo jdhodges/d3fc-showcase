@@ -47,6 +47,7 @@ export default function() {
     var currentYValueAccessor = function(d) { return d.close; };
     var currentIndicators = [];
     var zoomWidth;
+    var yAxisTextYOffset = '0.35em';
 
     var crosshairData = [];
     var crosshair = fc.tool.crosshair()
@@ -202,6 +203,10 @@ export default function() {
                 });
               closePriceTick.select('text')
                 .attr('transform', 'translate(' + calloutHeight / 2 + ',1)');
+
+              s.selectAll('text').each(function() {
+                  this.setAttribute('dy', yAxisTextYOffset);
+              });
           });
 
         var tickValuesWithoutAnnotations = yScale.ticks.apply(yScale, []);

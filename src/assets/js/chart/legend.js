@@ -5,6 +5,7 @@ export default function() {
     var priceFormat;
     var volumeFormat;
     var timeFormat;
+    var textYOffset = '0.71em';
 
     var tooltip = fc.chart.tooltip()
         .items([
@@ -33,7 +34,11 @@ export default function() {
 
             if (model.data) {
                 tooltipContainer.datum(model.data)
-                    .call(tooltip);
+                    .call(tooltip)
+                    .selectAll('text')
+                    .each(function() {
+                        this.setAttribute('dy', textYOffset);
+                    });
             }
         });
     }
