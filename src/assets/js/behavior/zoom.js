@@ -51,39 +51,41 @@ export default function(width) {
 
         zoomBehavior.x(scale)
           .on('zoom', function() {
-              var t = d3.event.translate,
-                  tx = t[0];
+              if (!d3.event.sourceEvent.button) {
+                  var t = d3.event.translate,
+                      tx = t[0];
 
-              var maxDomainViewed = controlZoom(zoomPixelExtent);
+                  var maxDomainViewed = controlZoom(zoomPixelExtent);
 
-              tx = clamp(tx, -zoomPixelExtent[1], -zoomPixelExtent[0]);
-              zoomBehavior.translate([tx, 0]);
+                  tx = clamp(tx, -zoomPixelExtent[1], -zoomPixelExtent[0]);
+                  zoomBehavior.translate([tx, 0]);
 
-              var panned = (zoomBehavior.scale() === 1);
-              var zoomed = (zoomBehavior.scale() !== 1);
+                  var panned = (zoomBehavior.scale() === 1);
+                  var zoomed = (zoomBehavior.scale() !== 1);
 
-              if ((panned && allowPan) || (zoomed && allowZoom)) {
-                  var domain = scale.domain();
-                  if (maxDomainViewed) {
-                      domain = xExtent;
-                  } else if (zoomed && trackingLatest) {
-                      domain = util.domain.moveToLatest(
-                          selection.datum().discontinuityProvider,
-                          domain,
-                          selection.datum().data);
-                  }
+                  if ((panned && allowPan) || (zoomed && allowZoom)) {
+                      var domain = scale.domain();
+                      if (maxDomainViewed) {
+                          domain = xExtent;
+                      } else if (zoomed && trackingLatest) {
+                          domain = util.domain.moveToLatest(
+                              selection.datum().discontinuityProvider,
+                              domain,
+                              selection.datum().data);
+                      }
 
-                  domain = clampDomain(domain, selection.datum().data, xExtent);
+                      domain = clampDomain(domain, selection.datum().data, xExtent);
 
-                  if (domain[0].getTime() !== domain[1].getTime()) {
-                      dispatch.zoom(domain);
+                      if (domain[0].getTime() !== domain[1].getTime()) {
+                          dispatch.zoom(domain);
+                      } else {
+                          // Ensure the user can't zoom-in infinitely, causing the chart to fail to render
+                          // #168, #411
+                          resetBehaviour();
+                      }
                   } else {
-                      // Ensure the user can't zoom-in infinitely, causing the chart to fail to render
-                      // #168, #411
                       resetBehaviour();
                   }
-              } else {
-                  resetBehaviour();
               }
           });
 

@@ -23,6 +23,12 @@ export default function() {
     var xScale = fc.scale.dateTime();
     var yScale = d3.scale.linear();
 
+    function onlyAllowLeftClick() {
+        if (d3.event.button) {
+            d3.event.stopPropagation();
+        }
+    }
+
     var navChart = fc.chart.cartesian(xScale, yScale)
         .yTicks(0)
         .margin({
@@ -47,7 +53,8 @@ export default function() {
 
             selection.selectAll('.background, .extent')
                 .attr('height', extentHeight)
-                .attr('y', backgroundStrokeWidth / 2);
+                .attr('y', backgroundStrokeWidth / 2)
+                .on('mousedown', onlyAllowLeftClick);
 
             // overload d3 styling for the brush handles
             // as Firefox does not react properly to setting these through less file.
@@ -61,7 +68,8 @@ export default function() {
                 .attr('mask', 'url("#brush-mask")');
 
             // Adds the handles to the brush sides
-            var handles = enter.selectAll('.e, .w');
+            var handles = enter.selectAll('.e, .w')
+                .on('mousedown', onlyAllowLeftClick);
             handles.append('circle')
                 .attr('cy', handleCircleCenter)
                 .attr('r', 7)

@@ -19,7 +19,11 @@ export default function() {
 
             containersEnter.append('span')
                 .attr('class', 'icon bf-icon-delete')
-                .on('click', dispatch.indicatorChange);
+                .on('click', function(d) {
+                    if (!d3.event.button) {
+                        dispatch.indicatorChange(d);
+                    }
+                });
 
             containersEnter.append('span')
                 .attr('class', 'indicator-label')

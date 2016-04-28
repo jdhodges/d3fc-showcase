@@ -14,7 +14,11 @@ export default function() {
         var resetButtonGroupEnter = resetButtonGroup.enter()
             .append('g')
             .attr('class', 'reset-button')
-            .on('click', dispatch[event.resetToLatest]);
+            .on('click', function(d) {
+                if (!d3.event.button) {
+                    dispatch[event.resetToLatest](d);
+                }
+            });
 
         resetButtonGroupEnter.append('path')
             .attr('d', 'M1.5 1.5h13.438L23 20.218 14.937 38H1.5l9.406-17.782L1.5 1.5z');
