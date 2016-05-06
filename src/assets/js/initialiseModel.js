@@ -86,7 +86,14 @@ export default function() {
         var area = fc.series.area()
             .xValue(function(d) { return d.date; });
         area.id = util.uid();
-        var areaOption = model.menu.option('Area', 'area', area, 'bf-icon-area-series');
+
+        var areaMulti = fc.series.multi()
+            .key(function(series) { return series.id; })
+            .series([line, area]);
+
+        areaMulti.id = util.uid();
+
+        var areaOption = model.menu.option('Area', 'area', areaMulti, 'bf-icon-area-series');
         areaOption.option.extentAccessor = 'close';
 
         var config = model.menu.dropdownConfig(null, false, true, true);

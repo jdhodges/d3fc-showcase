@@ -86,11 +86,6 @@ export default function() {
             default:
                 return this.visibleData;
             }
-        })
-        .decorate(function(selection) {
-            selection.enter()
-                .select('.area')
-                .attr('fill', 'url("#primary-area-series-gradient")');
         });
 
     var xScale = fc.scale.dateTime();
@@ -137,8 +132,18 @@ export default function() {
             currentSeries.option.yValue(currentYValueAccessor);
             break;
         case 'area':
-            currentSeries.option.yValue(currentYValueAccessor);
-            currentSeries.option.y0Value(function() { return yScale.domain()[0]; });
+            currentSeries.option
+                .decorate(function(selection) {
+                    selection.enter()
+                        .select('.area')
+                        .attr('fill', 'url("#primary-area-series-gradient")');
+                })
+                .series().forEach(function(_series) {
+                    if (_series.y0Value) {
+                        _series.y0Value(function() { return yScale.domain()[0]; });
+                    }
+                    _series.yValue(currentYValueAccessor);
+                });
             break;
         default:
             break;
@@ -191,7 +196,9 @@ export default function() {
 
         xScale.discontinuityProvider(model.discontinuityProvider);
 
-        crosshair.snap(fc.util.seriesPointSnapXOnly(currentSeries.option, model.visibleData));
+        var snapTo = currentSeries.option.xValue ? currentSeries.option : currentSeries.option.series()[0];
+
+        crosshair.snap(fc.util.seriesPointSnapXOnly(snapTo, model.visibleData));
         updateCrosshairDecorate(model.visibleData);
 
         movingAverage(model.data);
